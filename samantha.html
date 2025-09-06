@@ -18,49 +18,61 @@
     }
     header {
       width: 100%;
-      padding: 10px;
+      padding: 10px 20px;
       display: flex;
-      justify-content: space-between;
+      justify-content: space-between; /* ✅ logos in both corners */
       align-items: center;
     }
     header img {
-      max-height: 50px;
-      max-width: 40%;
+      max-height: 150px; /* ✅ slightly bigger for visibility */
+      max-width: 60px;
       object-fit: contain;
     }
     .game-area {
       flex: 1;
       width: 100%;
-      max-width: 480px;
+      max-width: 600px;
       text-align: center;
       padding: 20px;
     }
     h2 {
-      margin-bottom: 15px;
-      font-size: 28px;
+      margin: 20px 0 15px;
+      font-size: 32px;
+      font-weight: bold;
+      text-align: center;
     }
     .hint {
-      font-size: 18px;
-      margin-bottom: 15px;
+      font-size: 20px;
+      margin-bottom: 20px;
+      font-style: italic;
+      text-align: center;
     }
     .instructions {
       font-size: 16px;
-      margin-bottom: 20px;
+      margin: 20px auto;
       text-align: left;
       background: rgba(0,0,0,0.4);
-      padding: 10px;
+      padding: 15px;
       border-radius: 10px;
+      max-width: 500px;
+      line-height: 1.5;
+    }
+    .instructions p {
+      margin-top: 0;
+      font-weight: bold;
+      text-align: center;
     }
     input {
       width: 80%;
-      padding: 10px;
+      max-width: 350px;
+      padding: 12px;
       font-size: 18px;
       border-radius: 5px;
       border: none;
       background-color: black;
       color: white;
       text-align: center;
-      margin-bottom: 20px;
+      margin: 20px 0;
     }
     button {
       padding: 10px 20px;
@@ -68,7 +80,7 @@
       border: none;
       border-radius: 8px;
       background: #fff;
-      color: purple;
+      color: maroon;
       cursor: pointer;
       font-weight: bold;
     }
@@ -79,20 +91,18 @@
 </head>
 <body>
   <header>
-    <div id="college">
-      <img src="college_logo.png" alt="College Logo">
-    </div>
-    <div id="event">
-      <img src="event_logo.png" alt="Event Logo">
-    </div>
+    <!-- ✅ Replace file names with your actual logo files -->
+    <img src="logo.png" alt="College Logo">
+    <img src="event_logo.png" alt="Event Logo">
   </header>
 
   <div class="game-area">
+    <h2>Round 13</h2>
     <h2>Spot the Place</h2>
     <div class="hint">Hint: Easy to hold, harder to throw</div>
 
     <div class="instructions">
-      <p><strong>Instructions:</strong></p>
+      <p>Instructions:</p>
       <ol>
         <li>Arrange the cut pieces to complete the picture.</li>
         <li>Flip the completed picture to find the hidden password.</li>
@@ -100,7 +110,6 @@
     </div>
 
     <input type="text" id="answer" placeholder="Enter password here...">
-
     <br>
     <button onclick="checkAnswer()">Submit</button>
   </div>
@@ -113,12 +122,12 @@
 
     function checkAnswer() {
       const userInput = document.getElementById("answer").value;
-      const correctAnswer = "feather"; // expected password
+      const correctAnswer = "feather"; // ✅ expected password
 
       if (normalizeInput(userInput) === correctAnswer) {
         alert("✅ Correct! Moving to Round...");
         localStorage.setItem("round13", "completed");
-        window.location.href = "congratulation.html"; // Go to next round
+        window.location.href = "congratulation.html"; // ✅ Go to next round
       } else {
         alert("❌ Wrong password. Try again!");
       }
