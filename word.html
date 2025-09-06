@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Treasure Hunt -- Round 2</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: orange;
+      font-family: Arial, sans-serif;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      align-items: center;
+    }
+    header {
+      width: 100%;
+      padding: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    header img {
+      max-height: 50px;
+      max-width: 40%;
+      object-fit: contain;
+    }
+    .game-area {
+      flex: 1;
+      width: 100%;
+      max-width: 480px;
+      text-align: center;
+      padding: 20px;
+    }
+    .game-area img {
+      max-width: 250px;
+      height: auto;
+      display: block;
+      margin: 0 auto 20px;
+    }
+    h2 {
+      margin-bottom: 15px;
+    }
+    .answers {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: center;
+    }
+    .answers input {
+      width: 80%;
+      padding: 8px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: none;
+      text-align: center;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      background: #333;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #555;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div id="college">
+      <img src="https://sdmntprpolandcentral.oaiusercontent.com/files/00000000-274c-620a-8ce5-f6e717e278d9/raw?se=2025-09-03T08%3A06%3A03Z&sp=r&sv=2024-08-04&sr=b&scid=08264dd5-1b48-52df-b955-1fb299f21fd7&skoid=03727f49-62d3-42ac-8350-1c0e6559d238&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-09-02T23%3A45%3A38Z&ske=2025-09-03T23%3A45%3A38Z&sks=b&skv=2024-08-04&sig=9uJ2NnL6KXDrxeOcx2KCNnX4RdjC72Cx/EsYUgILlW4%3D" alt="College Logo">
+    </div>
+    <div id="event">
+      <img src="https://sdmntprpolandcentral.oaiusercontent.com/files/00000000-274c-620a-8ce5-f6e717e278d9/raw?se=2025-09-03T08%3A06%3A03Z&sp=r&sv=2024-08-04&sr=b&scid=08264dd5-1b48-52df-b955-1fb299f21fd7&skoid=03727f49-62d3-42ac-8350-1c0e6559d238&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-09-02T23%3A45%3A38Z&ske=2025-09-03T23%3A45%3A38Z&sks=b&skv=2024-08-04&sig=9uJ2NnL6KXDrxeOcx2KCNnX4RdjC72Cx/EsYUgILlW4%3D" alt="Event Logo">
+    </div>
+  </header>
+
+  <div class="game-area">
+    <!-- Wall clock image at 10:10 -->
+    <img src="https://sdmntprpolandcentral.oaiusercontent.com/files/00000000-274c-620a-8ce5-f6e717e278d9/raw?se=2025-09-03T08%3A06%3A03Z&sp=r&sv=2024-08-04&sr=b&scid=08264dd5-1b48-52df-b955-1fb299f21fd7&skoid=03727f49-62d3-42ac-8350-1c0e6559d238&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-09-02T23%3A45%3A38Z&ske=2025-09-03T23%3A45%3A38Z&sks=b&skv=2024-08-04&sig=9uJ2NnL6KXDrxeOcx2KCNnX4RdjC72Cx/EsYUgILlW4%3D" alt="Wall Clock at 10:10">
+    
+    <h2>Guess the words related to the above image?</h2>
+    
+    <div class="answers">
+      <input type="text" placeholder="Answer 1">
+      <input type="text" placeholder="Answer 2">
+      <input type="text" placeholder="Answer 3">
+    </div>
+    
+    <button onclick="checkAnswers()">Submit</button>
+  </div>
+
+  <script>
+    function checkAnswers() {
+      const correct = ["time", "alarm", "10:10"];
+      const inputs = document.querySelectorAll('.answers input');
+      let userAnswers = [];
+
+      inputs.forEach(input => {
+        userAnswers.push(input.value.trim().toLowerCase());
+      });
+
+      // Check if all correct answers are present, in any order
+      let allCorrect = correct.every(ans => userAnswers.includes(ans.toLowerCase()));
+
+      if (allCorrect) {
+        alert("🎉 Correct! Moving to Round 6...");
+        window.location.href = "country.html"; // go to next round
+      } else {
+        alert("❌ Some answers are wrong or missing. Try again!");
+      }
+    }
+  </script>
+</body>
+</html>
