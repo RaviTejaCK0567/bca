@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Treasure Hunt -- Round 3</title>
+  <title>Treasure Hunt -- Round 4</title>
   <style>
     body {
       margin: 0;
@@ -16,6 +16,25 @@
       height: 100vh;
       font-family: Arial, sans-serif;
       color: #fff;
+    }
+
+    /* ✅ Header styling: keeps logos inside screen */
+    header {
+      width: 100%;
+      display: flex;
+      justify-content: space-between; /* pushes one left, one right */
+      align-items: center;
+      padding: 10px 30px; /* added more padding so logos stay inside */
+      position: absolute;
+      top: 0;
+      left: 0;
+      box-sizing: border-box; /* ensures padding stays inside screen */
+    }
+
+    /* ✅ Logo size */
+    header img {
+      max-height: 150px;  /* adjust height */
+      max-width: 60px;  /* adjust width */
     }
 
     h2 {
@@ -52,6 +71,7 @@
     <img src="logo.png" alt="College Logo">
     <img src="eventlogo.png" alt="Event Logo">
   </header>
+
   <h2>Round 4:-Rearrange the Image</h2>
   <div class="puzzle" id="puzzle"></div>
 
