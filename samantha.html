@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Treasure Hunt -- Round 13</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: maroon;
+      font-family: Arial, sans-serif;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      align-items: center;
+    }
+    header {
+      width: 100%;
+      padding: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    header img {
+      max-height: 50px;
+      max-width: 40%;
+      object-fit: contain;
+    }
+    .game-area {
+      flex: 1;
+      width: 100%;
+      max-width: 480px;
+      text-align: center;
+      padding: 20px;
+    }
+    h2 {
+      margin-bottom: 15px;
+      font-size: 28px;
+    }
+    .hint {
+      font-size: 18px;
+      margin-bottom: 15px;
+    }
+    .instructions {
+      font-size: 16px;
+      margin-bottom: 20px;
+      text-align: left;
+      background: rgba(0,0,0,0.4);
+      padding: 10px;
+      border-radius: 10px;
+    }
+    input {
+      width: 80%;
+      padding: 10px;
+      font-size: 18px;
+      border-radius: 5px;
+      border: none;
+      background-color: black;
+      color: white;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      background: #fff;
+      color: purple;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    button:hover {
+      background: #ddd;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div id="college">
+      <img src="college_logo.png" alt="College Logo">
+    </div>
+    <div id="event">
+      <img src="event_logo.png" alt="Event Logo">
+    </div>
+  </header>
+
+  <div class="game-area">
+    <h2>Spot the Place</h2>
+    <div class="hint">Hint: Easy to hold, harder to throw</div>
+
+    <div class="instructions">
+      <p><strong>Instructions:</strong></p>
+      <ol>
+        <li>Arrange the cut pieces to complete the picture.</li>
+        <li>Flip the completed picture to find the hidden password.</li>
+      </ol>
+    </div>
+
+    <input type="text" id="answer" placeholder="Enter password here...">
+
+    <br>
+    <button onclick="checkAnswer()">Submit</button>
+  </div>
+
+  <script>
+    // Normalize input
+    function normalizeInput(str) {
+      return str.toLowerCase().replace(/\s+/g, "");
+    }
+
+    function checkAnswer() {
+      const userInput = document.getElementById("answer").value;
+      const correctAnswer = "feather"; // expected password
+
+      if (normalizeInput(userInput) === correctAnswer) {
+        alert("✅ Correct! Moving to Round...");
+        localStorage.setItem("round13", "completed");
+        window.location.href = "congratulation.html"; // Go to next round
+      } else {
+        alert("❌ Wrong password. Try again!");
+      }
+    }
+  </script>
+</body>
+</html>
