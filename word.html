@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Treasure Hunt -- Round 2</title>
+  <title>Treasure Hunt -- Round 5</title>
   <style>
     body {
       margin: 0;
@@ -16,18 +16,24 @@
       min-height: 100vh;
       align-items: center;
     }
+
+    /* ✅ Header styling */
     header {
       width: 100%;
-      padding: 10px;
+      padding: 10px 30px;
       display: flex;
-      justify-content: space-between;
+      justify-content: space-between; /* college logo left, event logo right */
       align-items: center;
+      box-sizing: border-box;
     }
+
     header img {
-      max-height: 50px;
-      max-width: 40%;
+      max-height: 150px;
+      max-width: 60px;
       object-fit: contain;
     }
+
+    /* ✅ Game area */
     .game-area {
       flex: 1;
       width: 100%;
@@ -35,21 +41,26 @@
       text-align: center;
       padding: 20px;
     }
+
     .game-area img {
       max-width: 250px;
       height: auto;
       display: block;
       margin: 0 auto 20px;
     }
+
     h2 {
       margin-bottom: 15px;
     }
+
+    /* ✅ Answers */
     .answers {
       display: flex;
       flex-direction: column;
       gap: 10px;
       align-items: center;
     }
+
     .answers input {
       width: 80%;
       padding: 8px;
@@ -58,6 +69,8 @@
       border: none;
       text-align: center;
     }
+
+    /* ✅ Button */
     button {
       margin-top: 20px;
       padding: 10px 20px;
@@ -68,21 +81,22 @@
       color: white;
       cursor: pointer;
     }
+
     button:hover {
       background: #555;
     }
   </style>
 </head>
 <body>
+  <!-- ✅ Fixed header (logos properly aligned) -->
   <header>
-   <header>
     <img src="logo.png" alt="College Logo">
     <img src="eventlogo.png" alt="Event Logo">
   </header>
 
+  <!-- ✅ Game content -->
   <div class="game-area">
     <h2>Round 5</h2>
-    <!-- Wall clock image at 10:10 -->
     <img src="clock.jpg" alt="Wall Clock at 10:10">
     
     <h2>Guess the words related to the above image?</h2>
