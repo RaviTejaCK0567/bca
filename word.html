@@ -22,14 +22,14 @@
       width: 100%;
       padding: 10px 30px;
       display: flex;
-      justify-content: space-between; /* college logo left, event logo right */
+      justify-content: space-between; /* ✅ logos to corners */
       align-items: center;
       box-sizing: border-box;
     }
 
     header img {
-      max-height: 180px;
-      max-width: 60px;
+      max-height: 120px; /* ✅ Increased size */
+      max-width: 120px;  /* ✅ Increased size */
       object-fit: contain;
     }
 
@@ -88,7 +88,7 @@
   </style>
 </head>
 <body>
-  <!-- ✅ Fixed header (logos properly aligned) -->
+  <!-- ✅ Fixed header (logos properly aligned & resized) -->
   <header>
     <img src="logo.png" alt="College Logo">
     <img src="eventlogo.png" alt="Event Logo">
