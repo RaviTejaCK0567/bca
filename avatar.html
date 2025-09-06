@@ -14,13 +14,14 @@
     }
     header {
       display: flex;
-      justify-content: space-between; /* ✅ Places logos at corners */
+      justify-content: space-between; /* ✅ Push logos to far left & right */
       align-items: center;
-      padding: 10px 20px;
+      padding: 0; /* ❌ Removed padding so logos stick to corners */
     }
     header img {
-      max-height: 150px; /* ✅ Control logo size */
+      max-height: 150px; /* ✅ Logo size */
       object-fit: contain;
+      margin: 10px; /* ✅ Add margin inside logos instead of header padding */
     }
     h1 {
       font-size: 40px;
@@ -35,7 +36,7 @@
     .instructions {
       margin-top: 30px;
       font-size: 18px;
-      text-align: center; /* ✅ Center aligned for consistency */
+      text-align: center;
     }
     .instructions h2 {
       margin-bottom: 10px;
@@ -77,7 +78,7 @@
 
   <!-- ✅ LOGOS SECTION -->
   <header>
-    <!-- Change "college_logo.png" to your actual college logo file -->
+    <!-- Change "logo.png" to your actual college logo file -->
     <img src="logo.png" alt="College Logo">
 
     <!-- Change "event_logo.png" to your actual event logo file -->
@@ -110,11 +111,11 @@
   <script>
     function checkAnswer() {
       const userAnswer = document.getElementById("answer").value.trim().toLowerCase();
-      const correctAnswer = "waste"; // ✅ Change this if you want a different answer
+      const correctAnswer = "waste"; // ✅ Change if needed
 
       if (userAnswer === correctAnswer) {
         document.getElementById("result").innerHTML = "✅ Correct! You can proceed to the next round.";
-        window.location.href = "prabhas.html"; // ✅ Change this to your next round file
+        window.location.href = "prabhas.html"; // ✅ Next round file
       } else {
         document.getElementById("result").innerHTML = "❌ Wrong answer. Try again!";
       }
