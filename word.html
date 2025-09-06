@@ -17,23 +17,21 @@
       align-items: center;
     }
 
-    /* ✅ Header styling */
     header {
       width: 100%;
       padding: 10px 30px;
       display: flex;
-      justify-content: space-between; /* ✅ logos to corners */
+      justify-content: space-between;
       align-items: center;
       box-sizing: border-box;
     }
 
     header img {
-      max-height: 150px; /* ✅ Increased size */
-      max-width: 60%;  /* ✅ Increased size */
+      max-height: 150px;
+      max-width: 60%;
       object-fit: contain;
     }
 
-    /* ✅ Game area */
     .game-area {
       flex: 1;
       width: 100%;
@@ -53,7 +51,6 @@
       margin-bottom: 15px;
     }
 
-    /* ✅ Answers */
     .answers {
       display: flex;
       flex-direction: column;
@@ -70,7 +67,6 @@
       text-align: center;
     }
 
-    /* ✅ Button */
     button {
       margin-top: 20px;
       padding: 10px 20px;
@@ -88,13 +84,11 @@
   </style>
 </head>
 <body>
-  <!-- ✅ Fixed header (logos properly aligned & resized) -->
   <header>
     <img src="logo.png" alt="College Logo">
     <img src="eventlogo.png" alt="Event Logo">
   </header>
 
-  <!-- ✅ Game content -->
   <div class="game-area">
     <h2>Round 5</h2>
     <img src="clock.jpg" alt="Wall Clock at 10:10">
@@ -125,7 +119,8 @@
 
       if (allCorrect) {
         alert("🎉 Correct! Moving to Round 6...");
-        window.location.href = "country.html"; // go to next round
+        // Make sure the next file exists in the same folder
+        window.location.href = "country.html"; 
       } else {
         alert("❌ Some answers are wrong or missing. Try again!");
       }
