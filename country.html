@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Treasure Hunt -- Round 6</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: orange;
+      font-family: Arial, sans-serif;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      align-items: center;
+    }
+    header {
+      width: 100%;
+      padding: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    header img {
+      max-height: 50px;
+      max-width: 40%;
+      object-fit: contain;
+    }
+    .game-area {
+      flex: 1;
+      width: 100%;
+      max-width: 480px;
+      text-align: center;
+      padding: 20px;
+    }
+    h2 {
+      margin-bottom: 15px;
+    }
+    .question {
+      font-size: 40px;
+      margin: 20px 0 10px;
+    }
+    .answers {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: center;
+    }
+    .answers input {
+      width: 80%;
+      padding: 8px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: none;
+      text-align: center;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      background: #333;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #555;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div id="college">
+      <img src="college_logo.png" alt="College Logo">
+    </div>
+    <div id="event">
+      <img src="event_logo.png" alt="Event Logo">
+    </div>
+  </header>
+
+  <div class="game-area">
+    <h2>Guess the countries from the emojis!</h2>
+
+    <div class="answers">
+      <div class="question">👁+🏃=</div>
+      <input type="text" placeholder="Answer 1">
+
+      <div class="question">🇺+ 🦢=</div>
+      <input type="text" placeholder="Answer 2">
+
+      <div class="question">🔔+🏋=</div>
+      <input type="text" placeholder="Answer 3">
+    </div>
+    
+    <button onclick="checkAnswers()">Submit</button>
+  </div>
+
+  <script>
+    // Redirect check: must come from Round 5
+    window.onload = function() {
+      if (localStorage.getItem("round6") == "completed") {
+        window.location.href = "round7.html";
+      }
+    };
+
+    function checkAnswers() {
+      const correct = ["iran", "ukraine", "belgium"];
+      const inputs = document.querySelectorAll('.answers input');
+      let userAnswers = [];
+
+      inputs.forEach(input => {
+        userAnswers.push(input.value.trim().toLowerCase());
+      });
+
+      // Check if all correct answers match (case insensitive)
+      let allCorrect = correct.every((ans, i) => userAnswers[i] === ans);
+
+      if (allCorrect) {
+        alert("🎉 Correct! Moving to Round 7...");
+        localStorage.setItem("round6", "completed");
+        window.location.href = "tictactoe.html"; 
+      } else {
+        alert("❌ Some answers are wrong or missing. Try again!");
+      }
+    }
+  </script>
+</body>
+</html>
