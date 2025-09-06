@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Treasure Hunt -- Round 11</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      background-color: blue;
+      font-family: Arial, sans-serif;
+      color: white;
+    }
+    h1 {
+      font-size: 40px;
+      font-weight: bold;
+      text-align: center;
+    }
+    .question {
+      margin-top: 30px;
+      font-size: 22px;
+      text-align: center;
+    }
+    .instructions {
+      margin-top: 30px;
+      font-size: 18px;
+    }
+    .answer-box {
+      margin-top: 20px;
+      text-align: center;
+    }
+    input[type="text"] {
+      padding: 10px;
+      font-size: 16px;
+      width: 250px;
+      border-radius: 8px;
+      border: none;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin-left: 10px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      background-color: white;
+      color: blue;
+      font-weight: bold;
+    }
+    .result {
+      margin-top: 20px;
+      font-size: 20px;
+      font-weight: bold;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <h1>Round 11</h1>
+
+  <div class="question">
+    I am not alive but I grow,<br>
+    I don't have lungs but I need air,<br>
+    I don't have mouth but water me.<br>
+    <b>What am I?</b>
+  </div>
+
+  <div class="instructions">
+    <h2>Instructions:</h2>
+    <p>1. Get the properties which are written on the board</p>
+    <p>2.Then get the slip from the mask man.</p>
+    <p>3. Fill the answer in the below box</p>
+  </div>
+
+  <div class="answer-box">
+    <input type="text" id="answer" placeholder="Enter your answer here"><br>
+    <br>
+    <br>
+    <button onclick="checkAnswer()">Submit</button>
+  </div>
+
+  <div class="result" id="result"></div>
+
+  <script>
+    function checkAnswer() {
+      const userAnswer = document.getElementById("answer").value.trim().toLowerCase();
+      const correctAnswer = "waste";
+
+      if (userAnswer === correctAnswer) {
+        document.getElementById("result").innerHTML = "✅ Correct! You can proceed to the next round.";
+        window.location.href = "prabhas.html";
+      } else {
+        document.getElementById("result").innerHTML = "❌ Wrong answer. Try again!";
+      }
+    }
+  </script>
+</body>
+</html>
