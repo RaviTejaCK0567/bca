@@ -8,8 +8,8 @@
     :root {
       --bg: orange;
       --card: #ffffff;
-      --text: #1f2937;
-      --muted: #6b7280;
+      --text: #000000; /* ✅ Text color black */
+      --muted: #333333; /* darker muted text for contrast */
       --ring: #3b82f6;
     }
     * { box-sizing: border-box; }
@@ -40,6 +40,23 @@
       text-align: center;
       color: var(--muted);
     }
+
+    /* ✅ Header styling */
+    header {
+      width: 100%;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+      box-sizing: border-box;
+    }
+    header img {
+      max-height: 150px;
+      max-width: 60px;
+      object-fit: contain;
+    }
+
     .card {
       background: var(--card);
       border-radius: 20px;
@@ -114,10 +131,12 @@
 </head>
 <body>
   <main class="wrap">
+    <!-- ✅ Arranged header logos -->
     <header>
-    <img src="logo.png" alt="College Logo">
-    <img src="eventlogo.png" alt="Event Logo">
-  </header>
+      <img src="logo.png" alt="College Logo">
+      <img src="eventlogo.png" alt="Event Logo">
+    </header>
+
     <h2>Round 8</h2>
     <h2>Find The Hidden Word</h2>
 
@@ -125,7 +144,7 @@
       <div class="media">
         <iframe
           src="video.mp4"
-          title="YouTube video player"
+          title="Video Player"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
           allowfullscreen>
         </iframe>
