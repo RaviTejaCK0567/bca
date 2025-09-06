@@ -8,19 +8,19 @@
     :root {
       --bg: orange;
       --card: #ffffff;
-      --text: #000000; /* ✅ Text color black */
-      --muted: #333333; /* darker muted text for contrast */
+      --text: #000000; /* ✅ Black text */
+      --muted: #555555; /* softer muted gray */
       --ring: #3b82f6;
     }
     * { box-sizing: border-box; }
     body {
       margin: 0;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+      font-family: system-ui, Arial, sans-serif;
       background: var(--bg);
       color: var(--text);
       display: grid;
       place-items: start center;
-      min-height: 100svh;
+      min-height: 100vh;
       padding: 24px;
     }
     .wrap {
@@ -30,7 +30,6 @@
       margin: 0 0 20px;
       font-size: clamp(28px, 3.5vw, 40px);
       font-weight: 800;
-      letter-spacing: 0.2px;
       text-align: center;
     }
     h2 {
@@ -38,7 +37,7 @@
       font-size: 20px;
       font-weight: 600;
       text-align: center;
-      color: var(--muted);
+      color: var(--text); /* ✅ clear titles */
     }
 
     /* ✅ Header styling */
@@ -49,11 +48,10 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: 10px;
-      box-sizing: border-box;
     }
     header img {
-      max-height: 150px;
-      max-width: 60px;
+      max-height: 150px;  /* ✅ balanced size */
+      max-width: 120px;
       object-fit: contain;
     }
 
@@ -67,17 +65,14 @@
     .media {
       position: relative;
       width: 100%;
-      aspect-ratio: 16 / 9;
       border-radius: 16px;
       overflow: hidden;
       background: #000;
     }
-    .media iframe {
-      position: absolute;
-      inset: 0;
+    .media video {
       width: 100%;
-      height: 100%;
-      border: 0;
+      height: auto;
+      display: block;
     }
     .answer {
       margin-top: 16px;
@@ -124,7 +119,7 @@
       if (ans === 'jonex') {
         window.location.href = 'jumbled.html';
       } else {
-        alert('Incorrect answer, please try again.');
+        alert('❌ Incorrect answer, please try again.');
       }
     }
   </script>
@@ -134,7 +129,7 @@
     <!-- ✅ Arranged header logos -->
     <header>
       <img src="logo.png" alt="College Logo">
-      <img src="eventlogo.png" alt="Event Logo">
+      <img src="event-logo.png" alt="Event Logo">
     </header>
 
     <h2>Round 8</h2>
@@ -142,12 +137,8 @@
 
     <section class="card" aria-label="Question video">
       <div class="media">
-        <iframe
-          src="video.mp4"
-          title="Video Player"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          allowfullscreen>
-        </iframe>
+        <!-- ✅ Correct video usage -->
+        <video src="video.mp4" controls></video>
       </div>
 
       <h2>The hidden word is the password 🔑 So guess the answer…?</h2>
