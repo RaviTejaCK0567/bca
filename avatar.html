@@ -12,6 +12,16 @@
       font-family: Arial, sans-serif;
       color: white;
     }
+    header {
+      display: flex;
+      justify-content: space-between; /* ✅ Places logos at corners */
+      align-items: center;
+      padding: 10px 20px;
+    }
+    header img {
+      max-height: 150px; /* ✅ Control logo size */
+      object-fit: contain;
+    }
     h1 {
       font-size: 40px;
       font-weight: bold;
@@ -25,6 +35,10 @@
     .instructions {
       margin-top: 30px;
       font-size: 18px;
+      text-align: center; /* ✅ Center aligned for consistency */
+    }
+    .instructions h2 {
+      margin-bottom: 10px;
     }
     .answer-box {
       margin-top: 20px;
@@ -48,6 +62,9 @@
       color: blue;
       font-weight: bold;
     }
+    button:hover {
+      background-color: lightgray;
+    }
     .result {
       margin-top: 20px;
       font-size: 20px;
@@ -57,6 +74,16 @@
   </style>
 </head>
 <body>
+
+  <!-- ✅ LOGOS SECTION -->
+  <header>
+    <!-- Change "college_logo.png" to your actual college logo file -->
+    <img src="logo.png" alt="College Logo">
+
+    <!-- Change "event_logo.png" to your actual event logo file -->
+    <img src="event_logo.png" alt="Event Logo">
+  </header>
+
   <h1>Round 11</h1>
 
   <div class="question">
@@ -69,14 +96,12 @@
   <div class="instructions">
     <h2>Instructions:</h2>
     <p>1. Get the properties which are written on the board</p>
-    <p>2.Then get the slip from the mask man.</p>
+    <p>2. Then get the slip from the mask man.</p>
     <p>3. Fill the answer in the below box</p>
   </div>
 
   <div class="answer-box">
-    <input type="text" id="answer" placeholder="Enter your answer here"><br>
-    <br>
-    <br>
+    <input type="text" id="answer" placeholder="Enter your answer here"><br><br><br>
     <button onclick="checkAnswer()">Submit</button>
   </div>
 
@@ -85,11 +110,11 @@
   <script>
     function checkAnswer() {
       const userAnswer = document.getElementById("answer").value.trim().toLowerCase();
-      const correctAnswer = "waste";
+      const correctAnswer = "waste"; // ✅ Change this if you want a different answer
 
       if (userAnswer === correctAnswer) {
         document.getElementById("result").innerHTML = "✅ Correct! You can proceed to the next round.";
-        window.location.href = "prabhas.html";
+        window.location.href = "prabhas.html"; // ✅ Change this to your next round file
       } else {
         document.getElementById("result").innerHTML = "❌ Wrong answer. Try again!";
       }
