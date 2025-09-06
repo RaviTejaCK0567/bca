@@ -3,19 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Treasure Hunt -- Round 9</title>
+  <title>Treasure Hunt — Round 1</title>
   <style>
     body {
       margin: 0;
       padding: 0;
-      background-color: green;
+      background-color: orange;
       font-family: Arial, sans-serif;
-      color: #fff;
+      color: #333;
       display: flex;
       flex-direction: column;
       min-height: 100vh;
       align-items: center;
     }
+
     header {
       width: 100%;
       padding: 10px;
@@ -23,108 +24,99 @@
       justify-content: space-between;
       align-items: center;
     }
+
     header img {
       max-height: 50px;
       max-width: 40%;
-      object-fit: contain;
     }
+
     .game-area {
       flex: 1;
       width: 100%;
       max-width: 480px;
-      text-align: center;
-      padding: 20px;
-    }
-    h2 {
-      margin-bottom: 15px;
-      font-size: 28px;
-    }
-    .hint {
-      font-size: 18px;
-      margin-bottom: 15px;
-    }
-    .instructions {
-      font-size: 16px;
-      margin-bottom: 20px;
-      text-align: left;
-      background: rgba(0,0,0,0.4);
+      position: relative;
       padding: 10px;
-      border-radius: 10px;
     }
-    input {
-      width: 80%;
-      padding: 10px;
-      font-size: 18px;
-      border-radius: 5px;
-      border: none;
-      background-color: black;
-      color: white;
-      text-align: center;
-      margin-bottom: 20px;
+
+    .images {
+      display: flex;
+      gap: 5px;
     }
-    button {
-      padding: 10px 20px;
-      font-size: 16px;
-      border: none;
-      border-radius: 8px;
-      background: #fff;
-      color: green;
-      cursor: pointer;
-      font-weight: bold;
+
+    .images img {
+      width: 50%;
+      height: auto;
+      display: block;
     }
-    button:hover {
-      background: #ddd;
+
+    .marker {
+      position: absolute;
+      border: 3px solid lime;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      background-color: rgba(0, 255, 0, 0.4);
     }
   </style>
 </head>
 <body>
   <header>
-    <div id="college">
-      <img src="college_logo.png" alt="College Logo">
-    </div>
-    <div id="event">
-      <img src="event_logo.png" alt="Event Logo">
-    </div>
+    <img src="college-logo.png" alt="College Logo">
+    <img src="event-logo.png" alt="Event Logo">
   </header>
 
   <div class="game-area">
-    <h2>Spot the Room</h2>
-    <div class="hint">Hint: What has keys but can't open locks?</div>
-
-    <div class="instructions">
-      <p><strong>Instructions:</strong></p>
-      <ol>
-        <li>First, solve the question written on the board.</li>
-        <li>Then, find the answer that contains a circle in it.</li>
-        <li>Finally, form a new word using that answer and fill it in the box.</li>
-      </ol>
+    <div class="images">
+      <img id="img1" src="https://iili.io/dUCXcG9.jpg" alt="Image 1">
+      <img id="img2" src="https://iili.io/dUCVIPn.jpg" alt="Image 2">
     </div>
-
-    <input type="text" id="answer" placeholder="Enter your answer here">
-
-    <br>
-    <button onclick="checkAnswer()">Submit</button>
   </div>
 
   <script>
-    // Normalize input: remove spaces, lowercase everything
-    function normalizeInput(str) {
-      return str.toLowerCase().replace(/\s+/g, "");
+    // Differences are defined using percentage positions (relative to image width/height)
+    const differences = [
+      { x: 48, y: 39, found: false },
+       { x: 59, y: 71, found: false },
+       { x: 39, y: 73, found: false },
+    ];
+
+    let foundCount = 0;
+
+    function handleImageClick(e, imageElement) {
+      const rect = imageElement.getBoundingClientRect();
+      const clickX = ((e.clientX - rect.left) / rect.width) * 100;
+      const clickY = ((e.clientY - rect.top) / rect.height) * 100;
+
+      differences.forEach(diff => {
+        if (!diff.found) {
+          const dx = diff.x - clickX;
+          const dy = diff.y - clickY;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+
+          if (distance < 5) { // 5% threshold
+            diff.found = true;
+            foundCount++;
+
+            const marker = document.createElement("div");
+            marker.className = "marker";
+            marker.style.left = `${e.clientX}px`;
+            marker.style.top = `${e.clientY}px`;
+            document.body.appendChild(marker);
+
+            if (foundCount === differences.length) {
+              setTimeout(() => {
+                window.location.href = "quiz.html"; // redirect when all found
+              }, 500);
+            }
+          }
+        }
+      });
     }
 
-    function checkAnswer() {
-      const userInput = document.getElementById("answer").value;
-      const correctAnswer = "satyajitray"; // expected answer
-
-      if (normalizeInput(userInput) === correctAnswer) {
-        alert("🎉 Correct! Moving to Round 10...");
-        localStorage.setItem("round9", "completed");
-        window.location.href = "round10.html"; 
-      } else {
-        alert("❌ Wrong answer. Try again!");
-      }
-    }
+    document.getElementById("img1").addEventListener("click", e => handleImageClick(e, e.target));
+    document.getElementById("img2").addEventListener("click", e => handleImageClick(e, e.target));
   </script>
 </body>
-
 </html>
