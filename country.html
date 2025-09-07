@@ -100,13 +100,6 @@
   </div>
 
   <script>
-    // Redirect check: must come from Round 5
-    window.onload = function() {
-      if (localStorage.getItem("round6") == "completed") {
-        window.location.href = "round7.html";
-      }
-    };
-
     function checkAnswers() {
       const correct = ["iran", "ukraine", "belgium"];
       const inputs = document.querySelectorAll('.answers input');
@@ -121,7 +114,6 @@
 
       if (allCorrect) {
         alert("🎉 Correct! Moving to Round 7...");
-        localStorage.setItem("round6", "completed");
         window.location.href = "tictactoe.html"; 
       } else {
         alert("❌ Some answers are wrong or missing. Try again!");
