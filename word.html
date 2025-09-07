@@ -119,8 +119,18 @@
 
       if (allCorrect) {
         alert("🎉 Correct! Moving to Round 6...");
-        // Make sure the next file exists in the same folder
-        window.location.href = "country.html"; 
+        // Check if next file exists before redirecting
+        fetch("country.html")
+          .then(response => {
+            if (response.ok) {
+              window.location.href = "country.html";
+            } else {
+              alert("⚠️ Next round file 'country.html' is missing. Please check your folder.");
+            }
+          })
+          .catch(() => {
+            alert("⚠️ Unable to load 'country.html'. Please check your folder.");
+          });
       } else {
         alert("❌ Some answers are wrong or missing. Try again!");
       }
