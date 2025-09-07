@@ -8,7 +8,7 @@
     body {
       margin: 0;
       padding: 0;
-      background-color: orange; /* Orange background for round 3 */
+      background-color: orange; /* Orange background for round 4 */
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -18,23 +18,23 @@
       color: #fff;
     }
 
-    /* ✅ Header styling: keeps logos inside screen */
+    /* ✅ Header styling */
     header {
       width: 100%;
       display: flex;
       justify-content: space-between; /* pushes one left, one right */
       align-items: center;
-      padding: 10px 30px; /* added more padding so logos stay inside */
+      padding: 10px 30px;
       position: absolute;
       top: 0;
       left: 0;
-      box-sizing: border-box; /* ensures padding stays inside screen */
+      box-sizing: border-box;
     }
 
     /* ✅ Logo size */
     header img {
-      max-height: 150px;  /* adjust height */
-      max-width: 60%;  /* adjust width */
+      max-height: 150px;
+      max-width: 60%;
     }
 
     h2 {
@@ -73,7 +73,7 @@
   </header> 
 
   <h2>Round 4</h2>
-  <h2>Rarrange the image</h2>
+  <h2>Rearrange the image</h2>
   <div class="puzzle" id="puzzle"></div>
 
   <script>
@@ -82,8 +82,18 @@
     // Tile positions (0-8, last one is empty)
     let positions = [0,1,2,3,4,5,6,7,null];
 
-    // Shuffle puzzle
-    positions = positions.sort(() => Math.random() - 0.5);
+    // ✅ Shuffle puzzle with ~10 random moves (medium difficulty)
+    function shuffleEasy(steps = 10) {
+      for (let i = 0; i < steps; i++) {
+        const emptyIndex = positions.indexOf(null);
+        const validMoves = [emptyIndex - 1, emptyIndex + 1, emptyIndex - 3, emptyIndex + 3]
+          .filter(idx => idx >= 0 && idx < 9);
+        const moveIndex = validMoves[Math.floor(Math.random() * validMoves.length)];
+        [positions[emptyIndex], positions[moveIndex]] = [positions[moveIndex], positions[emptyIndex]];
+      }
+    }
+
+    shuffleEasy(); // ✅ now ~10 moves away from solved
 
     // Create tiles
     function createTiles() {
@@ -105,13 +115,7 @@
 
     function moveTile(index) {
       const emptyIndex = positions.indexOf(null);
-      const validMoves = [
-        emptyIndex - 1,
-        emptyIndex + 1,
-        emptyIndex - 3,
-        emptyIndex + 3
-      ];
-
+      const validMoves = [emptyIndex - 1, emptyIndex + 1, emptyIndex - 3, emptyIndex + 3];
       if (validMoves.includes(index)) {
         [positions[index], positions[emptyIndex]] = [positions[emptyIndex], positions[index]];
         createTiles();
