@@ -111,32 +111,16 @@
   <script>
     const currentRound = "round8";
 
-    // ✅ Soft Anti-Cheat
+    // ✅ Anti-cheat: redirect if user switches tab or minimizes
     document.addEventListener("visibilitychange", () => {
       if (document.hidden) {
-        // User switched tabs or tried to inspect -> reset
-        sessionStorage.removeItem("inProgress");
-        localStorage.removeItem(currentRound + "_completed");
-        window.location.href = "index.html";
+        window.location.href = "index.html"; // go back to first round
       }
     });
-
-    // ✅ Prevent direct access
-    if (!sessionStorage.getItem("inProgress")) {
-      window.location.href = "index.html";
-    }
-
-    // ✅ Redirect if round already completed
-    window.onload = function() {
-      if (localStorage.getItem(currentRound + "_completed") === "true") {
-        window.location.href = "index.html";
-      }
-    };
 
     function checkAnswer() {
       const ans = document.getElementById('ans').value.trim().toLowerCase();
       if (ans === 'jonex') {
-        localStorage.setItem(currentRound + "_completed", "true");
         window.location.href = 'jumbled.html'; // ✅ Next round
       } else {
         alert('❌ Incorrect answer, please try again.');
