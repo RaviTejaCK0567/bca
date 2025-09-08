@@ -130,6 +130,13 @@
       }
     };
 
+    // ✅ Anti-cheat: redirect if user switches tab or minimizes
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) {
+        window.location.href = "index.html";
+      }
+    });
+
     function normalizeInput(str) {
       return str.replace(/\s+/g, "").toLowerCase();
     }
