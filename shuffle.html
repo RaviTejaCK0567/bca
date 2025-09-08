@@ -78,11 +78,24 @@
 
   <script>
     const puzzle = document.getElementById("puzzle");
+    const currentRound = "round4";
+
+    // ❌ Block reload/back after completion
+    window.onload = function() {
+      if (localStorage.getItem(currentRound + "Completed") === "true") {
+        document.body.innerHTML = `
+          <div style="font-size:28px; font-weight:bold; color:red; text-align:center; padding:50px;">
+            ⏳ Timeout Error<br><br>
+            This page is no longer available.
+          </div>
+        `;
+      }
+    };
 
     // Tile positions (0-8, last one is empty)
     let positions = [0,1,2,3,4,5,6,7,null];
 
-    // ✅ Shuffle puzzle with ~10 random moves (medium difficulty)
+    // ✅ Shuffle puzzle with ~10 random moves
     function shuffleEasy(steps = 10) {
       for (let i = 0; i < steps; i++) {
         const emptyIndex = positions.indexOf(null);
@@ -126,6 +139,8 @@
     function checkWin() {
       const solved = [0,1,2,3,4,5,6,7,null];
       if (JSON.stringify(positions) === JSON.stringify(solved)) {
+        alert("🎉 Congratulations! You solved Round 4. Moving to Round 5...");
+        localStorage.setItem(currentRound + "Completed", "true");
         setTimeout(() => {
           window.location.href = "word.html";
         }, 800);
