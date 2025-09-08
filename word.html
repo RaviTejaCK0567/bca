@@ -105,6 +105,20 @@
   </div>
 
   <script>
+    const currentRound = "round5";
+
+    // ❌ Block reload/back after completion
+    window.onload = function() {
+      if (localStorage.getItem(currentRound + "Completed") === "true") {
+        document.body.innerHTML = `
+          <div style="font-size:28px; font-weight:bold; color:red; text-align:center; padding:50px;">
+            ⏳ Timeout Error<br><br>
+            This page is no longer available.
+          </div>
+        `;
+      }
+    };
+
     function checkAnswers() {
       const correct = ["time", "alarm", "10:10"];
       const inputs = document.querySelectorAll('.answers input');
@@ -118,7 +132,9 @@
       let allCorrect = correct.every(ans => userAnswers.includes(ans.toLowerCase()));
 
       if (allCorrect) {
-        alert("🎉 Correct! Moving to Round 6...");
+        alert("🎉 Congratulations! You solved Round 5. Moving to Round 6...");
+        localStorage.setItem(currentRound + "Completed", "true");
+
         // Check if next file exists before redirecting
         fetch("country.html")
           .then(response => {
