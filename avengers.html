@@ -117,6 +117,13 @@
   <script>
     const currentRound = "round10";
 
+    // ✅ Anti-cheat: redirect if user switches tab or minimizes
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) {
+        window.location.href = "index.html";
+      }
+    });
+
     // ✅ Soft anti-cheat: if previous round not completed OR this round already completed → redirect to index
     window.onload = function() {
       if (localStorage.getItem("round9_completed") !== "true" || 
