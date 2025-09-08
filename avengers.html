@@ -115,21 +115,22 @@
   </div>
 
   <script>
-    // Redirect check: must come from Round 9
+    // ✅ Redirect if Round 9 not completed OR if this round is already completed
     window.onload = function() {
-      if (localStorage.getItem("round9") !== "completed") {
-        window.location.href = "round1.html";
+      if (sessionStorage.getItem("round9_completed") !== "true" || 
+          sessionStorage.getItem("round10_completed") === "true") {
+        window.location.href = "round1.html"; // back to first round
       }
     };
 
     function checkAnswer() {
       const userAnswer = document.getElementById("userAnswer").value.trim().toLowerCase();
-      const correctAnswer = "seong gi-hun";
+      const correctAnswer = "seong gi-hun"; // ✅ correct solution
 
       if (userAnswer === correctAnswer.toLowerCase()) {
         alert("🎉 Correct! Moving to Round 11...");
-        localStorage.setItem("round10", "completed");
-        window.location.href = "avatar.html"; 
+        sessionStorage.setItem("round10_completed", "true"); // mark as done
+        window.location.href = "avatar.html"; // ✅ next round
       } else {
         alert("❌ Wrong answer. Try again!");
       }
