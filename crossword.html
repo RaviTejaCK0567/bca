@@ -118,16 +118,12 @@
     const currentRound = "round3";
 
     // ✅ Soft anti-cheat redirect
-    if (!sessionStorage.getItem("inProgress")) {
+    // If round2 is not completed, reset all progress and send back to index
+    if (localStorage.getItem("round2Completed") !== "true") {
+      localStorage.clear();
+      sessionStorage.clear();
       window.location.href = "index.html";
     }
-
-    window.onload = function() {
-      if (localStorage.getItem(currentRound + "Completed") === "true" ||
-          localStorage.getItem("round2Completed") !== "true") {
-        window.location.href = "index.html";
-      }
-    };
 
     function checkPuzzle() {
       const correctWord = "binary";
@@ -143,13 +139,12 @@
       if (userAnswer === correctWord) {
         alert("🎉 Congratulations! You solved Round 3. Moving to Round 4...");
         localStorage.setItem(currentRound + "Completed", "true");
-        sessionStorage.setItem("inProgress", "true"); // mark legit progress
         messageDiv.textContent = "Correct! Moving to next round...";
         messageDiv.className = "message success";
         document.querySelector("button").disabled = true;
 
         setTimeout(() => {
-          window.location.href = "shuffle.html";
+          window.location.href = "shuffle.html"; // go to round 4
         }, 1000);
       } else {
         messageDiv.textContent = "Incorrect! Try again.";
