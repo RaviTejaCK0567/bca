@@ -78,6 +78,9 @@
   <script>
     const currentRound = "round1";
 
+    // ✅ Whenever player comes here, reset game progress
+    localStorage.clear();
+
     // Differences are defined using percentage positions
     const differences = [
       { x: 48, y: 39, found: false },
