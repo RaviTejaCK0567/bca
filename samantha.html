@@ -120,15 +120,25 @@
   </div>
 
   <script>
-    // Anti-cheat: prevent reload/close & reopen
+    // ----------------------
+    // Anti-cheat: redirect to index.html if revisited
+    // ----------------------
     if (sessionStorage.getItem("round13_visited")) {
-      document.body.innerHTML = "<h1 style='color:red;text-align:center;margin-top:20%;'>⚠️ Page Load Error!<br>This round cannot be reloaded or reopened.</h1>";
-      throw new Error("Reload blocked for Round 13");
+      window.location.href = "index.html";
     } else {
       sessionStorage.setItem("round13_visited", "true");
     }
 
-    // 32 allowed answers
+    // ----------------------
+    // Normalize input
+    // ----------------------
+    function normalizeInput(str) {
+      return str.toLowerCase().replace(/\s+/g, "");
+    }
+
+    // ----------------------
+    // Allowed answers
+    // ----------------------
     const allowedAnswers = [
       "motherboard","harddrive","operatingsystem","browser","algorithm","database",
       "artificialintelligence","machinelearning","blockchain","cloudcomputing","malware",
@@ -138,21 +148,17 @@
       "cache","ipaddress","frontend","backend","omen","mongodb"
     ];
 
-    // Used answers store
-    if (!localStorage.getItem("usedRound13Answers")) {
-      localStorage.setItem("usedRound13Answers", JSON.stringify([]));
-    }
+    // ----------------------
+    // Backend URL (Render)
+    // ----------------------
+    const backendURL = "https://techhunt-mobe.onrender.com"; // replace with your Render URL
 
-    // Normalize input
-    function normalizeInput(str) {
-      return str.toLowerCase().replace(/\s+/g, "");
-    }
-
+    // ----------------------
+    // Check Answer Function
+    // ----------------------
     function checkAnswer() {
       const userInput = normalizeInput(document.getElementById("answer").value);
       const messageDiv = document.getElementById("message");
-
-      const usedAnswers = JSON.parse(localStorage.getItem("usedRound13Answers"));
 
       if (!allowedAnswers.includes(userInput)) {
         messageDiv.textContent = "❌ Invalid answer!";
@@ -160,22 +166,34 @@
         return;
       }
 
-      if (usedAnswers.includes(userInput)) {
-        messageDiv.textContent = "❌ This answer is already used!";
-        messageDiv.style.color = "red";
-        return;
-      }
-
-      // ✅ Correct and unused
-      usedAnswers.push(userInput);
-      localStorage.setItem("usedRound13Answers", JSON.stringify(usedAnswers));
-
-      messageDiv.textContent = "✅ Correct! Moving to congratulations page...";
-      messageDiv.style.color = "green";
-
-      setTimeout(() => {
-        window.location.href = "congratulations.html";
-      }, 1500);
+      // check if answer is used dynamically
+      fetch(`${backendURL}/check-answer?round=13&answer=${userInput}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.used) {
+            messageDiv.textContent = "❌ This answer is already used!";
+            messageDiv.style.color = "red";
+          } else {
+            // mark answer as used
+            fetch(`${backendURL}/mark-used`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ round: "13", answer: userInput })
+            })
+            .then(res => res.json())
+            .then(() => {
+              messageDiv.textContent = "✅ Correct! Moving to congratulations page...";
+              messageDiv.style.color = "green";
+              setTimeout(() => {
+                window.location.href = "congratulations.html";
+              }, 1500);
+            });
+          }
+        })
+        .catch(() => {
+          messageDiv.textContent = "❌ Server error. Try again later!";
+          messageDiv.style.color = "red";
+        });
     }
   </script>
 </body>
