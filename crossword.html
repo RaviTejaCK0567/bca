@@ -8,7 +8,7 @@
     body {
       margin: 0;
       padding: 0;
-      background-color: orange; /* Orange theme */
+      background-color: orange;
       font-family: Arial, sans-serif;
       color: #fff;
       display: flex;
@@ -78,7 +78,7 @@
       font-size: 16px;
     }
 
-    .message.success { color: #FFD700; font-weight: bold; } /* Gold */
+    .message.success { color: #FFD700; font-weight: bold; }
     .message.error { color: #ffcccb; font-weight: bold; }
   </style>
 </head>
@@ -93,7 +93,6 @@
     <h2>Word Search Puzzle</h2>
     <p>Find and type the hidden computer-related word from the puzzle:</p>
 
-    <!-- Text-based Word Search Puzzle -->
     <div class="grid">
       A G H Y I V R F U N A<br>
       S I M O U S E U W O N<br>
@@ -115,11 +114,8 @@
   </div>
 
   <script>
-    const currentRound = "round3";
-
-    // ✅ Soft anti-cheat redirect
-    // If round2 is not completed, reset all progress and send back to index
-    if (localStorage.getItem("round2Completed") !== "true") {
+    // ✅ Cheat handler → if detected, restart game fresh
+    function cheatDetected() {
       localStorage.clear();
       sessionStorage.clear();
       window.location.href = "index.html";
@@ -138,7 +134,6 @@
 
       if (userAnswer === correctWord) {
         alert("🎉 Congratulations! You solved Round 3. Moving to Round 4...");
-        localStorage.setItem(currentRound + "Completed", "true");
         messageDiv.textContent = "Correct! Moving to next round...";
         messageDiv.className = "message success";
         document.querySelector("button").disabled = true;
