@@ -100,6 +100,20 @@
   </div>
 
   <script>
+    const currentRound = "round6";
+
+    // ❌ Block reload/back after completion
+    window.onload = function() {
+      if (localStorage.getItem(currentRound + "Completed") === "true") {
+        document.body.innerHTML = `
+          <div style="font-size:28px; font-weight:bold; color:red; text-align:center; padding:50px;">
+            ⏳ Timeout Error<br><br>
+            This page is no longer available.
+          </div>
+        `;
+      }
+    };
+
     function checkAnswers() {
       const correct = ["iran", "ukraine", "belgium"];
       const inputs = document.querySelectorAll('.answers input');
@@ -114,6 +128,7 @@
 
       if (allCorrect) {
         alert("🎉 Correct! Moving to Round 7...");
+        localStorage.setItem(currentRound + "Completed", "true");
         window.location.href = "tictactoe.html"; 
       } else {
         alert("❌ Some answers are wrong or missing. Try again!");
