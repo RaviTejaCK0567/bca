@@ -8,8 +8,8 @@
     :root {
       --bg: orange;
       --card: #ffffff;
-      --text: #000000; /* ✅ Black text */
-      --muted: #555555; /* softer muted gray */
+      --text: #000000; 
+      --muted: #555555;
       --ring: #3b82f6;
     }
     * { box-sizing: border-box; }
@@ -37,10 +37,9 @@
       font-size: 20px;
       font-weight: 600;
       text-align: center;
-      color: var(--text); /* ✅ clear titles */
+      color: var(--text); 
     }
 
-    /* ✅ Header styling */
     header {
       width: 100%;
       padding: 10px 20px;
@@ -50,7 +49,7 @@
       margin-bottom: 10px;
     }
     header img {
-      max-height: 150px;  /* ✅ balanced size */
+      max-height: 150px;  
       max-width: 60%;
       object-fit: contain;
     }
@@ -114,10 +113,18 @@
     button:active { transform: translateY(1px); }
   </style>
   <script>
+    // ✅ Redirect if round already completed
+    window.onload = function() {
+      if (sessionStorage.getItem("round8_completed") === "true") {
+        window.location.href = "index.html"; // send back to first round
+      }
+    };
+
     function checkAnswer() {
       const ans = document.getElementById('ans').value.trim().toLowerCase();
       if (ans === 'jonex') {
-        window.location.href = 'jumbled.html';
+        sessionStorage.setItem("round8_completed", "true"); // mark completed
+        window.location.href = 'jumbled.html'; // ✅ Next round
       } else {
         alert('❌ Incorrect answer, please try again.');
       }
@@ -126,7 +133,6 @@
 </head>
 <body>
   <main class="wrap">
-    <!-- ✅ Arranged header logos -->
     <header>
       <img src="logo.png" alt="College Logo">
       <img src="event-logo.png" alt="Event Logo">
@@ -137,7 +143,6 @@
 
     <section class="card" aria-label="Question video">
       <div class="media">
-        <!-- ✅ Correct video usage -->
         <video src="video.mp4" controls></video>
       </div>
 
