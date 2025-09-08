@@ -107,6 +107,20 @@
   </div>
 
   <script>
+    const currentRound = "round9";
+
+    // ✅ Anti-cheat: Block reload/back after completion
+    window.onload = function() {
+      if (localStorage.getItem(currentRound + "_completed") === "true") {
+        document.body.innerHTML = `
+          <div style="font-size:28px; font-weight:bold; color:red; text-align:center; padding:50px;">
+            ⏳ Timeout Error<br><br>
+            This page is no longer available.
+          </div>
+        `;
+      }
+    };
+
     // Normalize input: remove spaces, lowercase everything
     function normalizeInput(str) {
       return str.toLowerCase().replace(/\s+/g, "");
@@ -118,7 +132,7 @@
 
       if (normalizeInput(userInput) === correctAnswer) {
         alert("🎉 Correct! Moving to Round 10...");
-        localStorage.setItem("round9", "completed");
+        localStorage.setItem(currentRound + "_completed", "true");
         window.location.href = "avengers.html"; 
       } else {
         alert("❌ Wrong answer. Try again!");
