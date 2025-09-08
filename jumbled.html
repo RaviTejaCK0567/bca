@@ -109,26 +109,12 @@
   <script>
     const currentRound = "round9";
 
-    // ✅ Soft Anti-Cheat
+    // ✅ Anti-cheat: redirect if user switches tab or minimizes
     document.addEventListener("visibilitychange", () => {
       if (document.hidden) {
-        sessionStorage.removeItem("inProgress");
-        localStorage.removeItem(currentRound + "_completed");
         window.location.href = "index.html";
       }
     });
-
-    // ✅ Prevent direct access
-    if (!sessionStorage.getItem("inProgress")) {
-      window.location.href = "index.html";
-    }
-
-    // ✅ Block reload/back after completion
-    window.onload = function() {
-      if (localStorage.getItem(currentRound + "_completed") === "true") {
-        window.location.href = "index.html"; 
-      }
-    };
 
     // Normalize input: remove spaces, lowercase everything
     function normalizeInput(str) {
@@ -141,7 +127,6 @@
 
       if (normalizeInput(userInput) === correctAnswer) {
         alert("🎉 Correct! Moving to Round 10...");
-        localStorage.setItem(currentRound + "_completed", "true");
         window.location.href = "avengers.html"; 
       } else {
         alert("❌ Wrong answer. Try again!");
