@@ -20,11 +20,11 @@
       width: 100%;
       padding: 10px 20px;
       display: flex;
-      justify-content: space-between; /* ✅ logos in both corners */
+      justify-content: space-between;
       align-items: center;
     }
     header img {
-      max-height: 150px; /* ✅ slightly bigger for visibility */
+      max-height: 150px;
       max-width: 60%;
       object-fit: contain;
     }
@@ -87,11 +87,15 @@
     button:hover {
       background: #ddd;
     }
+    .message {
+      margin-top: 15px;
+      font-size: 18px;
+      font-weight: bold;
+    }
   </style>
 </head>
 <body>
   <header>
-    <!-- ✅ Replace file names with your actual logo files -->
     <img src="logo.png" alt="College Logo">
     <img src="event_logo.png" alt="Event Logo">
   </header>
@@ -112,15 +116,31 @@
     <input type="text" id="answer" placeholder="Enter password here...">
     <br>
     <button onclick="checkAnswer()">Submit</button>
+    <div class="message" id="message"></div>
   </div>
 
   <script>
-    // 🚫 Restrict refresh/close & reopen
+    // Anti-cheat: prevent reload/close & reopen
     if (sessionStorage.getItem("round13_visited")) {
       document.body.innerHTML = "<h1 style='color:red;text-align:center;margin-top:20%;'>⚠️ Page Load Error!<br>This round cannot be reloaded or reopened.</h1>";
       throw new Error("Reload blocked for Round 13");
     } else {
       sessionStorage.setItem("round13_visited", "true");
+    }
+
+    // 32 allowed answers
+    const allowedAnswers = [
+      "motherboard","harddrive","operatingsystem","browser","algorithm","database",
+      "artificialintelligence","machinelearning","blockchain","cloudcomputing","malware",
+      "datamining","visualization","networkarchitecture","userexperience","firewall",
+      "virtualprivatenetwork","bigdata","router","server","centralprocessingunit",
+      "graphicsprocessingunit","encryption","description","javascript","transistors",
+      "cache","ipaddress","frontend","backend","omen","mongodb"
+    ];
+
+    // Used answers store
+    if (!localStorage.getItem("usedRound13Answers")) {
+      localStorage.setItem("usedRound13Answers", JSON.stringify([]));
     }
 
     // Normalize input
@@ -129,16 +149,33 @@
     }
 
     function checkAnswer() {
-      const userInput = document.getElementById("answer").value;
-      const correctAnswer = "feather"; // ✅ expected password
+      const userInput = normalizeInput(document.getElementById("answer").value);
+      const messageDiv = document.getElementById("message");
 
-      if (normalizeInput(userInput) === correctAnswer) {
-        alert("✅ Correct! Moving to Round...");
-        localStorage.setItem("round13", "completed");
-        window.location.href = "congratulation.html"; // ✅ Go to next round
-      } else {
-        alert("❌ Wrong password. Try again!");
+      const usedAnswers = JSON.parse(localStorage.getItem("usedRound13Answers"));
+
+      if (!allowedAnswers.includes(userInput)) {
+        messageDiv.textContent = "❌ Invalid answer!";
+        messageDiv.style.color = "red";
+        return;
       }
+
+      if (usedAnswers.includes(userInput)) {
+        messageDiv.textContent = "❌ This answer is already used!";
+        messageDiv.style.color = "red";
+        return;
+      }
+
+      // ✅ Correct and unused
+      usedAnswers.push(userInput);
+      localStorage.setItem("usedRound13Answers", JSON.stringify(usedAnswers));
+
+      messageDiv.textContent = "✅ Correct! Moving to congratulations page...";
+      messageDiv.style.color = "green";
+
+      setTimeout(() => {
+        window.location.href = "congratulations.html";
+      }, 1500);
     }
   </script>
 </body>
