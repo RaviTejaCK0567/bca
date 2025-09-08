@@ -102,17 +102,28 @@
   <script>
     const currentRound = "round2";
 
-    // ❌ Block reloading or reopening this round after completion
+    // ✅ Redirect to index.html if cheating is detected
     window.onload = function() {
+      // if round already completed, block access
       if (localStorage.getItem(currentRound + "Completed") === "true") {
-        document.body.innerHTML = `
-          <div style="font-size:28px; font-weight:bold; color:red; text-align:center; padding:50px;">
-            ⏳ Timeout Error<br><br>
-            This page is no longer available.
-          </div>
-        `;
+        window.location.href = "index.html";
+      }
+
+      // if round1 not completed, force back to index
+      if (localStorage.getItem("round1Completed") !== "true") {
+        window.location.href = "index.html";
       }
     };
+
+    // Extra protection: if tab is restored or switched back
+    document.addEventListener("visibilitychange", () => {
+      if (document.visibilityState === "visible") {
+        if (localStorage.getItem(currentRound + "Completed") === "true" ||
+            localStorage.getItem("round1Completed") !== "true") {
+          window.location.href = "index.html";
+        }
+      }
+    });
 
     function checkAnswers() {
       const answers = {
