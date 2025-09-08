@@ -117,16 +117,11 @@
   <script>
     const currentRound = "round10";
 
-    // ✅ Anti-cheat: block reload/back or skipping previous rounds
+    // ✅ Soft anti-cheat: if previous round not completed OR this round already completed → redirect to index
     window.onload = function() {
       if (localStorage.getItem("round9_completed") !== "true" || 
           localStorage.getItem(currentRound + "_completed") === "true") {
-        document.body.innerHTML = `
-          <div style="font-size:28px; font-weight:bold; color:red; text-align:center; padding:50px;">
-            ⏳ Timeout Error<br><br>
-            This page is no longer available.
-          </div>
-        `;
+        window.location.href = "index.html"; // restart from first page
       }
     };
 
