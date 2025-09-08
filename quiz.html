@@ -8,7 +8,7 @@
     body {
       margin: 0;
       padding: 0;
-      background-color: #FFA500; /* Green background for round 2 */
+      background-color: #FFA500; /* Orange background for round 2 */
       font-family: Arial, sans-serif;
       color: #fff;
       display: flex;
@@ -77,7 +77,7 @@
     <img src="logo.png" alt="College Logo">
     <img src="eventlogo.png" alt="Event Logo">
   </header>
-<h2>Round 2</h2>
+  <h2>Round 2</h2>
   <h2>Quiz</h2>
   <div class="quiz-container">
     <div class="question">
@@ -100,6 +100,20 @@
   </div>
 
   <script>
+    const currentRound = "round2";
+
+    // ❌ Block reloading or reopening this round after completion
+    window.onload = function() {
+      if (localStorage.getItem(currentRound + "Completed") === "true") {
+        document.body.innerHTML = `
+          <div style="font-size:28px; font-weight:bold; color:red; text-align:center; padding:50px;">
+            ⏳ Timeout Error<br><br>
+            This page is no longer available.
+          </div>
+        `;
+      }
+    };
+
     function checkAnswers() {
       const answers = {
         q1: "104",
@@ -120,10 +134,11 @@
       const messageDiv = document.getElementById('message');
       
       if (allCorrect) {
-        messageDiv.textContent = "Correct! Moving to next round...";
+        alert("🎉 Congratulations! You completed Round 2. Moving to Round 3...");
+        localStorage.setItem(currentRound + "Completed", "true");
         setTimeout(() => {
           window.location.href = "crossword.html";
-        }, 1000);
+        }, 800);
       } else {
         messageDiv.textContent = "Some answers are incorrect. Try again!";
       }
