@@ -115,11 +115,18 @@
   <div class="result" id="result"></div>
 
   <script>
-    // ✅ Redirect if Round 10 not completed OR if this round already completed
+    const currentRound = "round11";
+
+    // ✅ Anti-cheat: block reload/back or skipping previous rounds
     window.onload = function() {
-      if (sessionStorage.getItem("round10_completed") !== "true" || 
-          sessionStorage.getItem("round11_completed") === "true") {
-        window.location.href = "round1.html";
+      if (localStorage.getItem("round10_completed") !== "true" || 
+          localStorage.getItem(currentRound + "_completed") === "true") {
+        document.body.innerHTML = `
+          <div style="font-size:28px; font-weight:bold; color:red; text-align:center; padding:50px;">
+            ⏳ Timeout Error<br><br>
+            This page is no longer available.
+          </div>
+        `;
       }
     };
 
@@ -129,7 +136,7 @@
 
       if (userAnswer === correctAnswer) {
         document.getElementById("result").innerHTML = "✅ Correct! You can proceed to the next round.";
-        sessionStorage.setItem("round11_completed", "true"); // Mark completed
+        localStorage.setItem(currentRound + "_completed", "true"); // Mark completed
         window.location.href = "prabhas.html"; // ✅ Next round file
       } else {
         document.getElementById("result").innerHTML = "❌ Wrong answer. Try again!";
