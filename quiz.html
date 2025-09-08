@@ -75,7 +75,7 @@
 <body>
   <header>
     <img src="logo.png" alt="College Logo">
-    <img src="eventlogo.png" alt="Event Logo">
+    <img src="event_logo.png" alt="Event Logo">
   </header>
   <h2>Round 2</h2>
   <h2>Quiz</h2>
@@ -102,28 +102,13 @@
   <script>
     const currentRound = "round2";
 
-    // ✅ Redirect to index.html if cheating is detected
+    // ✅ Soft redirect anti-cheat
     window.onload = function() {
-      // if round already completed, block access
-      if (localStorage.getItem(currentRound + "Completed") === "true") {
-        window.location.href = "index.html";
-      }
-
-      // if round1 not completed, force back to index
+      // If cheating (skipping order), send back to index.html
       if (localStorage.getItem("round1Completed") !== "true") {
         window.location.href = "index.html";
       }
     };
-
-    // Extra protection: if tab is restored or switched back
-    document.addEventListener("visibilitychange", () => {
-      if (document.visibilityState === "visible") {
-        if (localStorage.getItem(currentRound + "Completed") === "true" ||
-            localStorage.getItem("round1Completed") !== "true") {
-          window.location.href = "index.html";
-        }
-      }
-    });
 
     function checkAnswers() {
       const answers = {
