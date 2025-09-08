@@ -125,6 +125,13 @@
       }
     };
 
+    // ✅ Anti-cheat: redirect if user switches tab or minimizes
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) {
+        window.location.href = "index.html";
+      }
+    });
+
     function checkAnswer() {
       const userAnswer = document.getElementById("answer").value.trim().toLowerCase();
       const correctAnswer = "waste"; // ✅ Change if needed
