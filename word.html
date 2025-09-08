@@ -68,13 +68,11 @@
       outline: none;
     }
 
-    /* ✅ Correct input style */
     .correct {
       border: 2px solid green !important;
       background-color: #e6ffe6;
     }
 
-    /* ❌ Wrong input style */
     .wrong {
       border: 2px solid red !important;
       background-color: #ffe6e6;
@@ -118,26 +116,12 @@
   </div>
 
   <script>
-    const currentRound = "round5";
     const correct = ["time", "alarm", "10:10"];
 
-    // ✅ Anti-cheating: redirect if opened directly (new tab/bookmark)
-    if (!sessionStorage.getItem("inProgress")) {
-      window.location.href = "index.html"; // change to hosted index.html in GitHub/Render
+    // ✅ Soft cheat protection: If previous round not done → redirect to index
+    if (!sessionStorage.getItem("round4Done")) {
+      window.location.href = "index.html";
     }
-
-    // ❌ Block reload/back after completion
-    window.onload = function() {
-      if (localStorage.getItem(currentRound + "_completed") === "true") {
-        document.body.innerHTML = `
-          <div style="font-size:28px; font-weight:bold; color:red; text-align:center; padding:50px;">
-            ⏳ Timeout Error<br><br>
-            This page is no longer available.<br>
-            Please restart from <a href="index.html" style="color:blue; text-decoration:underline;">Round 1</a>.
-          </div>
-        `;
-      }
-    };
 
     function checkAnswers() {
       const inputs = document.querySelectorAll('.answers input');
@@ -163,11 +147,9 @@
       // ✅ All answers correct → move to next round
       if (correct.every(ans => userAnswers.includes(ans.toLowerCase()))) {
         alert("🎉 Congratulations! You solved Round 5. Moving to Round 6...");
-        localStorage.setItem(currentRound + "_completed", "true");
-        sessionStorage.setItem("inProgress", "true"); // legit progress
-
+        sessionStorage.setItem("round5Done", "true"); // mark legit progress
         setTimeout(() => {
-          window.location.href = "country.html"; // ✅ next round
+          window.location.href = "country.html"; // next round
         }, 800);
       } else {
         if (correctCount > 0) {
