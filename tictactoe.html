@@ -91,7 +91,7 @@
 <body>
   <header>
     <img src="logo.png" alt="College Logo">
-    <img src="eventlogo.png" alt="Event Logo">
+    <img src="event_logo.png" alt="Event Logo">
   </header>
 
   <div class="game-container">
@@ -105,20 +105,24 @@
   <script>
     const currentRound = "round7";
 
-    // ✅ Anti-cheating: redirect if opened in new tab/direct
+    // ✅ Soft Anti-Cheat
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) {
+        sessionStorage.removeItem("inProgress");
+        localStorage.removeItem(currentRound + "_completed");
+        window.location.href = "index.html";
+      }
+    });
+
+    // ✅ Prevent direct access
     if (!sessionStorage.getItem("inProgress")) {
       window.location.href = "index.html";
     }
 
-    // ❌ Block reload/back after completion
+    // ✅ Prevent replay after completion
     window.onload = function() {
-      if (localStorage.getItem(currentRound + "Completed") === "true") {
-        document.body.innerHTML = `
-          <div style="font-size:28px; font-weight:bold; color:red; text-align:center; padding:50px;">
-            ⏳ Timeout Error<br><br>
-            This page is no longer available.
-          </div>
-        `;
+      if (localStorage.getItem(currentRound + "_completed") === "true") {
+        window.location.href = "index.html"; 
       }
     };
 
@@ -190,7 +194,7 @@
 
       setTimeout(() => {
         if (playerWon) {
-          localStorage.setItem(currentRound + "Completed", "true");
+          localStorage.setItem(currentRound + "_completed", "true");
           window.location.href = "video.html"; // ✅ Next round
         } else {
           restart(); // Restart automatically if lose/draw
