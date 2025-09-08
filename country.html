@@ -53,8 +53,19 @@
       padding: 8px;
       font-size: 16px;
       border-radius: 5px;
-      border: none;
+      border: 2px solid #ccc;
       text-align: center;
+      outline: none;
+    }
+    /* ✅ Correct input style */
+    .correct {
+      border: 2px solid green !important;
+      background-color: #e6ffe6;
+    }
+    /* ❌ Wrong input style */
+    .wrong {
+      border: 2px solid red !important;
+      background-color: #ffe6e6;
     }
     button {
       margin-top: 20px;
@@ -101,6 +112,12 @@
 
   <script>
     const currentRound = "round6";
+    const correct = ["iran", "ukraine", "belgium"];
+
+    // ✅ Anti-cheating: redirect if opened in new tab/direct
+    if (!sessionStorage.getItem("inProgress")) {
+      window.location.href = "index.html";
+    }
 
     // ❌ Block reload/back after completion
     window.onload = function() {
@@ -115,23 +132,38 @@
     };
 
     function checkAnswers() {
-      const correct = ["iran", "ukraine", "belgium"];
       const inputs = document.querySelectorAll('.answers input');
       let userAnswers = [];
+      let correctCount = 0;
 
-      inputs.forEach(input => {
-        userAnswers.push(input.value.trim().toLowerCase());
+      inputs.forEach((input, i) => {
+        const value = input.value.trim().toLowerCase();
+        userAnswers.push(value);
+
+        if (value === correct[i]) {
+          input.classList.add("correct");
+          input.classList.remove("wrong");
+          correctCount++;
+        } else if (value !== "") {
+          input.classList.add("wrong");
+          input.classList.remove("correct");
+        } else {
+          input.classList.remove("correct", "wrong");
+        }
       });
 
-      // Check if all correct answers match (case insensitive)
-      let allCorrect = correct.every((ans, i) => userAnswers[i] === ans);
-
-      if (allCorrect) {
+      // ✅ All answers correct → move to next round
+      if (correct.every((ans, i) => userAnswers[i] === ans)) {
         alert("🎉 Correct! Moving to Round 7...");
         localStorage.setItem(currentRound + "Completed", "true");
+        sessionStorage.setItem("inProgress", "true"); // keep progress safe
         window.location.href = "tictactoe.html"; 
       } else {
-        alert("❌ Some answers are wrong or missing. Try again!");
+        if (correctCount > 0) {
+          alert("✅ Some answers are correct! Keep going...");
+        } else {
+          alert("❌ All wrong! Try again.");
+        }
       }
     }
   </script>
