@@ -113,9 +113,16 @@
     button:active { transform: translateY(1px); }
   </style>
   <script>
+    const currentRound = "round8";
+
+    // ✅ Anti-cheating: redirect if opened in new tab/direct
+    if (!sessionStorage.getItem("inProgress")) {
+      window.location.href = "index.html";
+    }
+
     // ✅ Redirect if round already completed
     window.onload = function() {
-      if (sessionStorage.getItem("round8_completed") === "true") {
+      if (localStorage.getItem(currentRound + "_completed") === "true") {
         window.location.href = "index.html"; // send back to first round
       }
     };
@@ -123,7 +130,7 @@
     function checkAnswer() {
       const ans = document.getElementById('ans').value.trim().toLowerCase();
       if (ans === 'jonex') {
-        sessionStorage.setItem("round8_completed", "true"); // mark completed
+        localStorage.setItem(currentRound + "_completed", "true"); // mark completed
         window.location.href = 'jumbled.html'; // ✅ Next round
       } else {
         alert('❌ Incorrect answer, please try again.');
