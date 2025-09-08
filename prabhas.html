@@ -96,7 +96,7 @@
 <body>
   <header>
     <img src="logo.png" alt="College Logo">
-    <img src="event-logo.png" alt="Event Logo">
+    <img src="event_logo.png" alt="Event Logo">
   </header>
 
   <div class="quiz-container">
@@ -122,11 +122,11 @@
   <script>
     const currentRound = "round12";
 
-    // ✅ Anti-cheat: block reload/back, skip previous rounds, or redirect to index.html
+    // ✅ Soft anti-cheat: if previous round not completed OR this round already completed → send back to index
     window.onload = function() {
       if (localStorage.getItem("round11_completed") !== "true" || 
           localStorage.getItem(currentRound + "_completed") === "true") {
-        window.location.href = "index.html"; // ⬅ redirect to first page
+        window.location.href = "index.html"; // restart from first page
       }
     };
 
