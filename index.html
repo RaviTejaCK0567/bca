@@ -64,7 +64,7 @@
 <body>
   <header>
     <img src="logo.png" alt="College Logo">
-    <img src="eventlogo.png" alt="Event Logo">
+    <img src="event_logo.png" alt="Event Logo">
   </header>
   <h2>Round 1</h2>
   <h2>Find The Difference</h2>
@@ -78,19 +78,7 @@
   <script>
     const currentRound = "round1";
 
-    // ❌ Block reloading or coming back once completed
-    window.onload = function() {
-      if (localStorage.getItem(currentRound + "Completed") === "true") {
-        document.body.innerHTML = `
-          <div style="font-size:28px; font-weight:bold; color:red; text-align:center; padding:50px;">
-            ⏳ Timeout Error<br><br>
-            This page is no longer available.
-          </div>
-        `;
-      }
-    };
-
-    // Differences are defined using percentage positions (relative to image width/height)
+    // Differences are defined using percentage positions
     const differences = [
       { x: 48, y: 39, found: false },
       { x: 59, y: 71, found: false },
@@ -110,7 +98,7 @@
           const dy = diff.y - clickY;
           const distance = Math.sqrt(dx * dx + dy * dy);
 
-          if (distance < 5) { // 5% threshold
+          if (distance < 5) {
             diff.found = true;
             foundCount++;
 
@@ -124,7 +112,7 @@
               setTimeout(() => {
                 alert("🎉 Congratulations! You completed Round 1. Moving to Round 2...");
                 localStorage.setItem(currentRound + "Completed", "true");
-                window.location.href = "quiz.html"; // redirect when all found
+                window.location.href = "quiz.html"; // go to round2
               }, 500);
             }
           }
