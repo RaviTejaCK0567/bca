@@ -121,15 +121,6 @@
 
   <script>
     // ----------------------
-    // Anti-cheat: redirect to index.html if revisited
-    // ----------------------
-    if (sessionStorage.getItem("round13_visited")) {
-      window.location.href = "index.html";
-    } else {
-      sessionStorage.setItem("round13_visited", "true");
-    }
-
-    // ----------------------
     // Normalize input
     // ----------------------
     function normalizeInput(str) {
