@@ -16,12 +16,12 @@
       display: flex;
       justify-content: space-between; /* ✅ Push logos to far left & right */
       align-items: center;
-      padding: 0; /* ❌ Removed padding so logos stick to corners */
+      padding: 0;
     }
     header img {
-      max-height: 150px; /* ✅ Logo size */
+      max-height: 150px;
       object-fit: contain;
-      margin: 10px; /* ✅ Add margin inside logos instead of header padding */
+      margin: 10px;
     }
     h1 {
       font-size: 40px;
@@ -115,12 +115,21 @@
   <div class="result" id="result"></div>
 
   <script>
+    // ✅ Redirect if Round 10 not completed OR if this round already completed
+    window.onload = function() {
+      if (sessionStorage.getItem("round10_completed") !== "true" || 
+          sessionStorage.getItem("round11_completed") === "true") {
+        window.location.href = "round1.html";
+      }
+    };
+
     function checkAnswer() {
       const userAnswer = document.getElementById("answer").value.trim().toLowerCase();
       const correctAnswer = "waste"; // ✅ Change if needed
 
       if (userAnswer === correctAnswer) {
         document.getElementById("result").innerHTML = "✅ Correct! You can proceed to the next round.";
+        sessionStorage.setItem("round11_completed", "true"); // Mark completed
         window.location.href = "prabhas.html"; // ✅ Next round file
       } else {
         document.getElementById("result").innerHTML = "❌ Wrong answer. Try again!";
