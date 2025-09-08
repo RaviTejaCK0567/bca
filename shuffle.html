@@ -67,7 +67,7 @@
 <body>
   <header>
     <img src="logo.png" alt="College Logo">
-    <img src="eventlogo.png" alt="Event Logo">
+    <img src="event_logo.png" alt="Event Logo">
   </header> 
 
   <h2>Round 4</h2>
@@ -78,24 +78,17 @@
     const puzzle = document.getElementById("puzzle");
     const currentRound = "round4";
 
-    // ✅ Anti-cheating redirect
+    // ✅ Soft anti-cheat redirect
+    if (!sessionStorage.getItem("inProgress")) {
+      window.location.href = "index.html";
+    }
+
     window.onload = function() {
-      if (localStorage.getItem(currentRound + "Completed") === "true") {
-        window.location.href = "index.html";
-      }
-      if (localStorage.getItem("round3Completed") !== "true") {
+      if (localStorage.getItem(currentRound + "Completed") === "true" ||
+          localStorage.getItem("round3Completed") !== "true") {
         window.location.href = "index.html";
       }
     };
-
-    document.addEventListener("visibilitychange", () => {
-      if (document.visibilityState === "visible") {
-        if (localStorage.getItem(currentRound + "Completed") === "true" ||
-            localStorage.getItem("round3Completed") !== "true") {
-          window.location.href = "index.html";
-        }
-      }
-    });
 
     // Tile positions (0-8, last one is empty)
     let positions = [0,1,2,3,4,5,6,7,null];
@@ -146,6 +139,7 @@
       if (JSON.stringify(positions) === JSON.stringify(solved)) {
         alert("🎉 Congratulations! You solved Round 4. Moving to Round 5...");
         localStorage.setItem(currentRound + "Completed", "true");
+        sessionStorage.setItem("inProgress", "true"); // legit progress
         setTimeout(() => {
           window.location.href = "word.html";
         }, 800);
