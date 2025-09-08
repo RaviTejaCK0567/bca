@@ -120,13 +120,15 @@
   </div>
 
   <script>
-    // 🚫 Restrict refresh/close & reopen
-    if (sessionStorage.getItem("round12_visited")) {
-      document.body.innerHTML = "<h1 style='color:red;text-align:center;margin-top:20%;'>⚠️ Page Load Error!<br>This round cannot be reloaded or reopened.</h1>";
-      throw new Error("Reload blocked for Round 12");
-    } else {
-      sessionStorage.setItem("round12_visited", "true");
-    }
+    const currentRound = "round12";
+
+    // ✅ Anti-cheat: block reload/back, skip previous rounds, or redirect to index.html
+    window.onload = function() {
+      if (localStorage.getItem("round11_completed") !== "true" || 
+          localStorage.getItem(currentRound + "_completed") === "true") {
+        window.location.href = "index.html"; // ⬅ redirect to first page
+      }
+    };
 
     function normalizeInput(str) {
       return str.replace(/\s+/g, "").toLowerCase();
@@ -134,15 +136,15 @@
 
     function checkAnswer() {
       const userAnswer = normalizeInput(document.getElementById("answer").value);
-      const correctAnswer = "megahit";
-
+      const correctAnswer = "megahit"; 
       const messageDiv = document.getElementById("message");
 
       if (userAnswer === correctAnswer) {
         messageDiv.textContent = "🎉 Congratulations! You solved it. Moving to the next round...";
         messageDiv.style.color = "green";
+        localStorage.setItem(currentRound + "_completed", "true"); // ✅ Mark as done
         setTimeout(() => {
-          window.location.href = "samantha.html";
+          window.location.href = "samantha.html"; // ✅ Next round
         }, 1500);
       } else {
         messageDiv.textContent = "❌ Incorrect! Try again.";
