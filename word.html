@@ -99,7 +99,7 @@
 <body>
   <header>
     <img src="logo.png" alt="College Logo">
-    <img src="eventlogo.png" alt="Event Logo">
+    <img src="event_logo.png" alt="Event Logo">
   </header>
 
   <div class="game-area">
@@ -121,18 +121,19 @@
     const currentRound = "round5";
     const correct = ["time", "alarm", "10:10"];
 
-    // ✅ Anti-cheating: Redirect if opened in new tab/direct
+    // ✅ Anti-cheating: redirect if opened directly (new tab/bookmark)
     if (!sessionStorage.getItem("inProgress")) {
-      window.location.href = "index.html";
+      window.location.href = "index.html"; // change to hosted index.html in GitHub/Render
     }
 
     // ❌ Block reload/back after completion
     window.onload = function() {
-      if (localStorage.getItem(currentRound + "Completed") === "true") {
+      if (localStorage.getItem(currentRound + "_completed") === "true") {
         document.body.innerHTML = `
           <div style="font-size:28px; font-weight:bold; color:red; text-align:center; padding:50px;">
             ⏳ Timeout Error<br><br>
-            This page is no longer available.
+            This page is no longer available.<br>
+            Please restart from <a href="index.html" style="color:blue; text-decoration:underline;">Round 1</a>.
           </div>
         `;
       }
@@ -143,7 +144,7 @@
       let userAnswers = [];
       let correctCount = 0;
 
-      inputs.forEach((input, index) => {
+      inputs.forEach((input) => {
         const value = input.value.trim().toLowerCase();
         userAnswers.push(value);
 
@@ -159,24 +160,14 @@
         }
       });
 
-      // ✅ Check if all answers are correct
+      // ✅ All answers correct → move to next round
       if (correct.every(ans => userAnswers.includes(ans.toLowerCase()))) {
         alert("🎉 Congratulations! You solved Round 5. Moving to Round 6...");
-        localStorage.setItem(currentRound + "Completed", "true");
-        sessionStorage.setItem("inProgress", "true"); // mark legit progress
+        localStorage.setItem(currentRound + "_completed", "true");
+        sessionStorage.setItem("inProgress", "true"); // legit progress
 
         setTimeout(() => {
-          fetch("country.html")
-            .then(response => {
-              if (response.ok) {
-                window.location.href = "country.html";
-              } else {
-                alert("⚠️ Next round file 'country.html' is missing. Please check your folder.");
-              }
-            })
-            .catch(() => {
-              alert("⚠️ Unable to load 'country.html'. Please check your folder.");
-            });
+          window.location.href = "country.html"; // ✅ next round
         }, 800);
       } else {
         if (correctCount > 0) {
