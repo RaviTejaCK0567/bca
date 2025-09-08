@@ -23,9 +23,7 @@
       min-height: 100vh;
       padding: 24px;
     }
-    .wrap {
-      width: min(920px, 100%);
-    }
+    .wrap { width: min(920px, 100%); }
     h1 {
       margin: 0 0 20px;
       font-size: clamp(28px, 3.5vw, 40px);
@@ -39,7 +37,6 @@
       text-align: center;
       color: var(--text); 
     }
-
     header {
       width: 100%;
       padding: 10px 20px;
@@ -53,7 +50,6 @@
       max-width: 60%;
       object-fit: contain;
     }
-
     .card {
       background: var(--card);
       border-radius: 20px;
@@ -115,7 +111,17 @@
   <script>
     const currentRound = "round8";
 
-    // ✅ Anti-cheating: redirect if opened in new tab/direct
+    // ✅ Soft Anti-Cheat
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) {
+        // User switched tabs or tried to inspect -> reset
+        sessionStorage.removeItem("inProgress");
+        localStorage.removeItem(currentRound + "_completed");
+        window.location.href = "index.html";
+      }
+    });
+
+    // ✅ Prevent direct access
     if (!sessionStorage.getItem("inProgress")) {
       window.location.href = "index.html";
     }
@@ -123,14 +129,14 @@
     // ✅ Redirect if round already completed
     window.onload = function() {
       if (localStorage.getItem(currentRound + "_completed") === "true") {
-        window.location.href = "index.html"; // send back to first round
+        window.location.href = "index.html";
       }
     };
 
     function checkAnswer() {
       const ans = document.getElementById('ans').value.trim().toLowerCase();
       if (ans === 'jonex') {
-        localStorage.setItem(currentRound + "_completed", "true"); // mark completed
+        localStorage.setItem(currentRound + "_completed", "true");
         window.location.href = 'jumbled.html'; // ✅ Next round
       } else {
         alert('❌ Incorrect answer, please try again.');
