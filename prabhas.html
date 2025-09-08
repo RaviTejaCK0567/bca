@@ -120,6 +120,14 @@
   </div>
 
   <script>
+    // 🚫 Restrict refresh/close & reopen
+    if (sessionStorage.getItem("round12_visited")) {
+      document.body.innerHTML = "<h1 style='color:red;text-align:center;margin-top:20%;'>⚠️ Page Load Error!<br>This round cannot be reloaded or reopened.</h1>";
+      throw new Error("Reload blocked for Round 12");
+    } else {
+      sessionStorage.setItem("round12_visited", "true");
+    }
+
     function normalizeInput(str) {
       return str.replace(/\s+/g, "").toLowerCase();
     }
