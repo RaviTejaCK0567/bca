@@ -114,23 +114,23 @@
   </div>
 
   <script>
-    // ✅ Only trigger tab switch after first user interaction
-    let userInteracted = false;
+    let interacted = false;
 
-    function userInteraction() {
-      userInteracted = true;
-      window.removeEventListener("keydown", userInteraction);
-      window.removeEventListener("mousedown", userInteraction);
-      window.removeEventListener("touchstart", userInteraction);
+    // Only start tab switch detection after user interacts with page
+    function startInteraction() {
+      interacted = true;
+      window.removeEventListener("keydown", startInteraction);
+      window.removeEventListener("mousedown", startInteraction);
+      window.removeEventListener("touchstart", startInteraction);
     }
 
-    window.addEventListener("keydown", userInteraction);
-    window.addEventListener("mousedown", userInteraction);
-    window.addEventListener("touchstart", userInteraction);
+    window.addEventListener("keydown", startInteraction);
+    window.addEventListener("mousedown", startInteraction);
+    window.addEventListener("touchstart", startInteraction);
 
     document.addEventListener("visibilitychange", () => {
-      if (userInteracted && document.hidden) {
-        // Redirect to index.html if user switches tab
+      if (interacted && document.hidden) {
+        // Only redirect if user interacted and then switched tabs
         window.location.href = "index.html";
       }
     });
@@ -160,7 +160,7 @@
       }
     }
 
-    // Allow pressing Enter key
+    // Allow Enter key
     document.getElementById("answer").addEventListener("keypress", function(e) {
       if (e.key === "Enter") {
         e.preventDefault();
