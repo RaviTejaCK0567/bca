@@ -96,35 +96,39 @@
 
     <div class="answers">
       <div class="question">👁+🏃=</div>
-      <input type="text" placeholder="Answer 1">
+      <input type="text" placeholder="Answer 1" required>
 
       <div class="question">🇺+ 🦢=</div>
-      <input type="text" placeholder="Answer 2">
+      <input type="text" placeholder="Answer 2" required>
 
       <div class="question">🔔+🏋=</div>
-      <input type="text" placeholder="Answer 3">
+      <input type="text" placeholder="Answer 3" required>
     </div>
     
     <button onclick="checkAnswers()">Submit</button>
   </div>
 
   <script>
+    // ✅ Correct answers
     const correct = ["iran", "ukraine", "belgium"];
+
+    // ✅ Normalize function: remove spaces & lowercase
+    function normalize(str) {
+      return str.replace(/\s+/g, "").toLowerCase();
+    }
 
     function checkAnswers() {
       const inputs = document.querySelectorAll('.answers input');
-      let userAnswers = [];
-      let correctCount = 0;
+      const userAnswers = Array.from(inputs).map(input => normalize(input.value));
+
+      // Check if all answers are correct
+      const allCorrect = correct.every((ans, i) => ans === userAnswers[i]);
 
       inputs.forEach((input, i) => {
-        const value = input.value.trim().toLowerCase();
-        userAnswers.push(value);
-
-        if (value === correct[i]) {
+        if (normalize(input.value) === correct[i]) {
           input.classList.add("correct");
           input.classList.remove("wrong");
-          correctCount++;
-        } else if (value !== "") {
+        } else if (input.value.trim() !== "") {
           input.classList.add("wrong");
           input.classList.remove("correct");
         } else {
@@ -132,15 +136,13 @@
         }
       });
 
-      if (correct.every((ans, i) => userAnswers[i] === ans)) {
+      if (allCorrect) {
         alert("🎉 Correct! Moving to Round 7...");
-        window.location.href = "tictactoe.html"; // next round
+        window.location.href = "tictactoe.html"; // ✅ next round
+      } else if (userAnswers.some((ans, i) => ans === correct[i])) {
+        alert("✅ Some answers are correct! Keep going...");
       } else {
-        if (correctCount > 0) {
-          alert("✅ Some answers are correct! Keep going...");
-        } else {
-          alert("❌ All wrong! Try again.");
-        }
+        alert("❌ All wrong! Try again.");
       }
     }
   </script>
