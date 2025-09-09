@@ -24,103 +24,42 @@
       padding: 24px;
     }
     .wrap { width: min(920px, 100%); }
-    h1 {
-      margin: 0 0 20px;
-      font-size: clamp(28px, 3.5vw, 40px);
-      font-weight: 800;
-      text-align: center;
-    }
-    h2 {
-      margin: 16px 0;
-      font-size: 20px;
-      font-weight: 600;
-      text-align: center;
-      color: var(--text); 
-    }
-    header {
-      width: 100%;
-      padding: 10px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 10px;
-    }
-    header img {
-      max-height: 150px;  
-      max-width: 60%;
-      object-fit: contain;
-    }
-    .card {
-      background: var(--card);
-      border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.06);
-      padding: 18px;
-      border: 1px solid rgba(0,0,0,0.06);
-    }
-    .media {
-      position: relative;
-      width: 100%;
-      border-radius: 16px;
-      overflow: hidden;
-      background: #000;
-    }
-    .media video {
-      width: 100%;
-      height: auto;
-      display: block;
-    }
-    .answer {
-      margin-top: 16px;
-      display: grid;
-      gap: 10px;
-    }
-    label {
-      font-size: 14px;
-      color: var(--muted);
-    }
-    input[type="text"] {
-      padding: 14px 16px;
-      font-size: 16px;
-      border-radius: 12px;
-      border: 1px solid rgba(0,0,0,0.15);
-      outline: none;
-      background: #fff;
-      width: 100%;
-      transition: box-shadow .15s ease, border-color .15s ease;
-    }
-    input[type="text"]:focus {
-      border-color: var(--ring);
-      box-shadow: 0 0 0 4px rgba(59,130,246,0.15);
-    }
-    .row {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-    }
-    button {
-      padding: 12px 18px;
-      border: none;
-      border-radius: 12px;
-      font-weight: 600;
-      cursor: pointer;
-      background: var(--ring);
-      color: #fff;
-    }
+    h1 { margin: 0 0 20px; font-size: clamp(28px, 3.5vw, 40px); font-weight: 800; text-align: center; }
+    h2 { margin: 16px 0; font-size: 20px; font-weight: 600; text-align: center; color: var(--text); }
+    header { width: 100%; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    header img { max-height: 150px; max-width: 60%; object-fit: contain; }
+    .card { background: var(--card); border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.06); padding: 18px; border: 1px solid rgba(0,0,0,0.06); }
+    .media { position: relative; width: 100%; border-radius: 16px; overflow: hidden; background: #000; }
+    .media video { width: 100%; height: auto; display: block; }
+    .answer { margin-top: 16px; display: grid; gap: 10px; }
+    label { font-size: 14px; color: var(--muted); }
+    input[type="text"] { padding: 14px 16px; font-size: 16px; border-radius: 12px; border: 1px solid rgba(0,0,0,0.15); outline: none; background: #fff; width: 100%; transition: box-shadow .15s ease, border-color .15s ease; }
+    input[type="text"]:focus { border-color: var(--ring); box-shadow: 0 0 0 4px rgba(59,130,246,0.15); }
+    .row { display: flex; gap: 10px; align-items: center; }
+    button { padding: 12px 18px; border: none; border-radius: 12px; font-weight: 600; cursor: pointer; background: var(--ring); color: #fff; }
     button:active { transform: translateY(1px); }
-  </style>
-  <script>
-    function checkAnswer() {
-      const ans = document.getElementById('ans').value.trim().toLowerCase();
-      if (ans === 'jonex') {
-        window.location.href = 'jumbled.html'; // Next round
-      } else {
-        alert('❌ Incorrect answer, please try again.');
-      }
+
+    /* Blur overlay */
+    #blurOverlay {
+      position: fixed;
+      top:0; left:0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.75);
+      color: white;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      font-size: 26px;
+      font-weight: bold;
+      z-index: 9999;
+      text-align: center;
     }
-  </script>
+    #blurOverlay span { margin-top: 15px; font-size: 40px; color: red; }
+  </style>
 </head>
 <body>
-  <main class="wrap">
+  <main class="wrap" id="gameContent">
     <header>
       <img src="logo.png" alt="College Logo">
       <img src="event-logo.png" alt="Event Logo">
@@ -145,5 +84,52 @@
       </div>
     </section>
   </main>
+
+  <!-- Blur overlay -->
+  <div id="blurOverlay">
+    ⚠️ You tried to cheat!<br>
+    Wait <span id="countdown">7</span> seconds...
+  </div>
+
+  <script>
+    const gameContent = document.getElementById("gameContent");
+    const blurOverlay = document.getElementById("blurOverlay");
+    const countdownEl = document.getElementById("countdown");
+
+    function checkAnswer() {
+      const ans = document.getElementById('ans').value.trim().toLowerCase();
+      if(ans === 'jonex') {
+        window.location.href = 'jumbled.html'; // Next round
+      } else {
+        alert('❌ Incorrect answer, please try again.');
+      }
+    }
+
+    // Anti-cheating blur effect
+    let countdownTimer = null;
+    function activateBlur() {
+      let timeLeft = 7;
+      countdownEl.textContent = timeLeft;
+      blurOverlay.style.display = "flex";
+      gameContent.style.filter = "blur(10px)";
+
+      clearInterval(countdownTimer);
+      countdownTimer = setInterval(() => {
+        timeLeft--;
+        countdownEl.textContent = timeLeft;
+        if(timeLeft <= 0) {
+          clearInterval(countdownTimer);
+          blurOverlay.style.display = "none";
+          gameContent.style.filter = "none";
+        }
+      }, 1000);
+    }
+
+    document.addEventListener("visibilitychange", () => {
+      if(document.hidden) {
+        activateBlur();
+      }
+    });
+  </script>
 </body>
 </html>
