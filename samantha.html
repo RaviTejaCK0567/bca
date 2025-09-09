@@ -121,6 +121,11 @@
 
   <script>
     // ----------------------
+    // Backend URL
+    // ----------------------
+    const backendURL = "https://treasure-hunt-backend.onrender.com";
+
+    // ----------------------
     // Normalize input
     // ----------------------
     function normalizeInput(str) {
@@ -128,63 +133,59 @@
     }
 
     // ----------------------
-    // Allowed answers
+    // Check Answer
     // ----------------------
-    const allowedAnswers = [
-      "motherboard","harddrive","operatingsystem","browser","algorithm","database",
-      "artificialintelligence","machinelearning","blockchain","cloudcomputing","malware",
-      "datamining","visualization","networkarchitecture","userexperience","firewall",
-      "virtualprivatenetwork","bigdata","router","server","centralprocessingunit",
-      "graphicsprocessingunit","encryption","description","javascript","transistors",
-      "cache","ipaddress","frontend","backend","omen","mongodb"
-    ];
-
-    // ----------------------
-    // Backend URL (Render)
-    // ----------------------
-    const backendURL = "https://techhunt-mobe.onrender.com"; // replace with your Render URL
-
-    // ----------------------
-    // Check Answer Function
-    // ----------------------
-    function checkAnswer() {
+    async function checkAnswer() {
       const userInput = normalizeInput(document.getElementById("answer").value);
       const messageDiv = document.getElementById("message");
 
-      if (!allowedAnswers.includes(userInput)) {
-        messageDiv.textContent = "❌ Invalid answer!";
+      if (!userInput) {
+        messageDiv.textContent = "❌ Please enter an answer!";
         messageDiv.style.color = "red";
         return;
       }
 
-      // check if answer is used dynamically
-      fetch(`${backendURL}/check-answer?round=13&answer=${userInput}`)
-        .then(res => res.json())
-        .then(data => {
-          if (data.used) {
-            messageDiv.textContent = "❌ This answer is already used!";
-            messageDiv.style.color = "red";
-          } else {
-            // mark answer as used
-            fetch(`${backendURL}/mark-used`, {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ round: "13", answer: userInput })
-            })
-            .then(res => res.json())
-            .then(() => {
-              messageDiv.textContent = "✅ Correct! Moving to congratulations page...";
-              messageDiv.style.color = "green";
-              setTimeout(() => {
-                window.location.href = "congratulations.html";
-              }, 1500);
-            });
-          }
-        })
-        .catch(() => {
-          messageDiv.textContent = "❌ Server error. Try again later!";
+      try {
+        // Check if answer is valid and not used
+        const checkRes = await fetch(`${backendURL}/check-answer?round=13&answer=${userInput}`);
+        const checkData = await checkRes.json();
+
+        if (!checkData.valid) {
+          messageDiv.textContent = "❌ Invalid answer!";
           messageDiv.style.color = "red";
+          return;
+        }
+
+        if (checkData.used) {
+          messageDiv.textContent = "❌ This answer is already used!";
+          messageDiv.style.color = "red";
+          return;
+        }
+
+        // Mark answer as used
+        const markRes = await fetch(`${backendURL}/mark-used`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ round: "13", answer: userInput })
         });
+
+        const markData = await markRes.json();
+        if (markData.success) {
+          messageDiv.textContent = "✅ Correct! Moving to congratulations page...";
+          messageDiv.style.color = "green";
+          setTimeout(() => {
+            window.location.href = "congratulations.html";
+          }, 1500);
+        } else {
+          messageDiv.textContent = "❌ Could not save your answer. Try again!";
+          messageDiv.style.color = "red";
+        }
+
+      } catch (err) {
+        console.error(err);
+        messageDiv.textContent = "❌ Server error. Try again later!";
+        messageDiv.style.color = "red";
+      }
     }
   </script>
 </body>
