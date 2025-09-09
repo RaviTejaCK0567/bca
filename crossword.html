@@ -78,8 +78,8 @@
       font-size: 16px;
     }
 
-    .message.success { color: #FFD700; font-weight: bold; }
-    .message.error { color: #ffcccb; font-weight: bold; }
+    .message.success { color: #00FF00; font-weight: bold; }
+    .message.error { color: #ff3333; font-weight: bold; }
   </style>
 </head>
 <body>
@@ -114,15 +114,23 @@
   </div>
 
   <script>
-    // ✅ Only trigger tab switch detection AFTER page fully loaded
-    let pageLoaded = false;
-    window.addEventListener("load", () => {
-      pageLoaded = true;
-    });
+    // ✅ Only trigger tab switch after first user interaction
+    let userInteracted = false;
+
+    function userInteraction() {
+      userInteracted = true;
+      window.removeEventListener("keydown", userInteraction);
+      window.removeEventListener("mousedown", userInteraction);
+      window.removeEventListener("touchstart", userInteraction);
+    }
+
+    window.addEventListener("keydown", userInteraction);
+    window.addEventListener("mousedown", userInteraction);
+    window.addEventListener("touchstart", userInteraction);
 
     document.addEventListener("visibilitychange", () => {
-      // Only redirect if page is fully loaded AND tab is hidden
-      if (pageLoaded && document.hidden) {
+      if (userInteracted && document.hidden) {
+        // Redirect to index.html if user switches tab
         window.location.href = "index.html";
       }
     });
@@ -139,16 +147,15 @@
       }
 
       if (userAnswer === correctWord) {
-        alert("🎉 Congratulations! You solved Round 3. Moving to Round 4...");
-        messageDiv.textContent = "Correct! Moving to next round...";
+        messageDiv.textContent = "✅ Correct! Moving to next round...";
         messageDiv.className = "message success";
         document.querySelector("button").disabled = true;
 
         setTimeout(() => {
-          window.location.href = "shuffle.html"; // go to round 4
+          window.location.href = "shuffle.html"; // next round
         }, 1000);
       } else {
-        messageDiv.textContent = "Incorrect! Try again.";
+        messageDiv.textContent = "❌ Incorrect! Try again.";
         messageDiv.className = "message error";
       }
     }
