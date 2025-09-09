@@ -111,18 +111,6 @@
   <script>
     const correct = ["iran", "ukraine", "belgium"];
 
-    // ✅ Anti-cheat: block if tab changes/minimized
-    document.addEventListener("visibilitychange", () => {
-      if (document.hidden) {
-        window.location.href = "index.html";
-      }
-    });
-
-    // ✅ Anti-cheat: only allow access if coming from previous round
-    if (!document.referrer.includes("round5")) {
-      window.location.href = "index.html";
-    }
-
     function checkAnswers() {
       const inputs = document.querySelectorAll('.answers input');
       let userAnswers = [];
@@ -144,7 +132,6 @@
         }
       });
 
-      // ✅ All answers correct → move to next round
       if (correct.every((ans, i) => userAnswers[i] === ans)) {
         alert("🎉 Correct! Moving to Round 7...");
         window.location.href = "tictactoe.html"; // next round
