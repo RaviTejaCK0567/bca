@@ -109,19 +109,10 @@
     button:active { transform: translateY(1px); }
   </style>
   <script>
-    const currentRound = "round8";
-
-    // ✅ Anti-cheat: redirect if user switches tab or minimizes
-    document.addEventListener("visibilitychange", () => {
-      if (document.hidden) {
-        window.location.href = "index.html"; // go back to first round
-      }
-    });
-
     function checkAnswer() {
       const ans = document.getElementById('ans').value.trim().toLowerCase();
       if (ans === 'jonex') {
-        window.location.href = 'jumbled.html'; // ✅ Next round
+        window.location.href = 'jumbled.html'; // Next round
       } else {
         alert('❌ Incorrect answer, please try again.');
       }
