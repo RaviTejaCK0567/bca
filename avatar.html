@@ -14,7 +14,7 @@
     }
     header {
       display: flex;
-      justify-content: space-between; /* ✅ Push logos to far left & right */
+      justify-content: space-between;
       align-items: center;
       padding: 0;
     }
@@ -83,7 +83,6 @@
 </head>
 <body>
 
-  <!-- ✅ LOGOS SECTION -->
   <header>
     <img src="logo.png" alt="College Logo">
     <img src="event_logo.png" alt="Event Logo">
@@ -115,21 +114,14 @@
   <div class="result" id="result"></div>
 
   <script>
-    // ✅ Anti-cheat: redirect if user switches tab or minimizes
-    document.addEventListener("visibilitychange", () => {
-      if (document.hidden) {
-        window.location.href = "index.html";
-      }
-    });
-
     function checkAnswer() {
       const userAnswer = document.getElementById("answer").value.trim().toLowerCase();
-      const correctAnswer = "waste"; // ✅ Change if needed
+      const correctAnswer = "waste"; // correct solution
 
       if (userAnswer === correctAnswer) {
         document.getElementById("result").innerHTML = "✅ Correct! You can proceed to the next round.";
         setTimeout(() => {
-          window.location.href = "prabhas.html"; // ✅ Next round file
+          window.location.href = "prabhas.html"; // next round
         }, 800);
       } else {
         document.getElementById("result").innerHTML = "❌ Wrong answer. Try again!";
