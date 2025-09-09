@@ -114,12 +114,12 @@
   </div>
 
   <script>
-    // ✅ Cheat handler → if detected, restart game fresh
-    function cheatDetected() {
-      localStorage.clear();
-      sessionStorage.clear();
-      window.location.href = "index.html";
-    }
+    // ✅ Anti-cheat: if user switches tab or minimizes, restart
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) {
+        window.location.href = "index.html";
+      }
+    });
 
     function checkPuzzle() {
       const correctWord = "binary";
