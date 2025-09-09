@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -80,6 +79,58 @@
       font-weight: bold;
       text-align: center;
     }
+
+    /* Blur overlay */
+    #blurOverlay {
+      position: fixed;
+      top:0; left:0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.75);
+      color: white;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      font-size: 26px;
+      font-weight: bold;
+      z-index: 9999;
+      text-align: center;
+    }
+    #blurOverlay span { margin-top: 15px; font-size: 40px; color: red; }
+
+    /* Popup modal for correct answer */
+    #correctPopup {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 10000;
+    }
+    #correctPopupContent {
+      background: white;
+      color: black;
+      padding: 30px 40px;
+      border-radius: 12px;
+      text-align: center;
+      font-size: 22px;
+      font-weight: bold;
+    }
+    #correctPopupContent button {
+      margin-top: 20px;
+      background: blue;
+      color: white;
+      font-weight: bold;
+      border-radius: 8px;
+      padding: 10px 20px;
+      border: none;
+      cursor: pointer;
+    }
+    #correctPopupContent button:hover {
+      background: darkblue;
+    }
   </style>
 </head>
 <body>
@@ -107,27 +158,74 @@
     </ol>
   </div>
 
-  <div class="answer-box">
+  <div class="answer-box" id="gameContent">
     <input type="text" id="answer" placeholder="Enter your answer here"><br><br><br>
     <button onclick="checkAnswer()">Submit</button>
   </div>
 
   <div class="result" id="result"></div>
 
+  <!-- Blur overlay -->
+  <div id="blurOverlay">
+    ⚠️ You tried to cheat!<br>
+    Wait <span id="countdown">7</span> seconds...
+  </div>
+
+  <!-- Correct Answer Popup -->
+  <div id="correctPopup">
+    <div id="correctPopupContent">
+      🎉 Correct!<br>Press OK to go to Round 12
+      <br><button onclick="goNextRound()">OK</button>
+    </div>
+  </div>
+
   <script>
+    const gameContent = document.getElementById("gameContent");
+    const blurOverlay = document.getElementById("blurOverlay");
+    const countdownEl = document.getElementById("countdown");
+    const correctPopup = document.getElementById("correctPopup");
+
     function checkAnswer() {
       const userAnswer = document.getElementById("answer").value.trim().toLowerCase();
       const correctAnswer = "waste"; // correct solution
 
       if (userAnswer === correctAnswer) {
-        document.getElementById("result").innerHTML = "✅ Correct! You can proceed to the round 12.";
-        setTimeout(() => {
-          window.location.href = "prabhas.html"; // next round
-        }, 800);
+        // Show popup instead of redirect
+        correctPopup.style.display = "flex";
       } else {
         document.getElementById("result").innerHTML = "❌ Wrong answer. Try again!";
       }
     }
+
+    function goNextRound() {
+      window.location.href = "prabhas.html"; // next round
+    }
+
+    // Anti-cheating blur effect
+    let countdownTimer = null;
+    function activateBlur() {
+      let timeLeft = 7;
+      countdownEl.textContent = timeLeft;
+      blurOverlay.style.display = "flex";
+      gameContent.style.filter = "blur(10px)";
+
+      clearInterval(countdownTimer);
+      countdownTimer = setInterval(() => {
+        timeLeft--;
+        countdownEl.textContent = timeLeft;
+        if(timeLeft <= 0) {
+          clearInterval(countdownTimer);
+          blurOverlay.style.display = "none";
+          gameContent.style.filter = "none";
+        }
+      }, 1000);
+    }
+
+    document.addEventListener("visibilitychange", () => {
+      if(document.hidden) {
+        activateBlur();
+      }
+    });
   </script>
 </body>
 </html>
