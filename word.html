@@ -15,6 +15,7 @@
       flex-direction: column;
       min-height: 100vh;
       align-items: center;
+      position: relative;
     }
 
     header {
@@ -92,27 +93,61 @@
     button:hover {
       background: #555;
     }
+
+    /* 🔒 Blur effect */
+    .blurred {
+      filter: blur(8px);
+      pointer-events: none;
+      user-select: none;
+    }
+
+    /* 🔒 Popup overlay */
+    #cheatPopup {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.85);
+      color: white;
+      font-size: 24px;
+      font-weight: bold;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      z-index: 9999;
+      text-align: center;
+    }
   </style>
 </head>
 <body>
-  <header>
-    <img src="logo.png" alt="College Logo">
-    <img src="event_logo.png" alt="Event Logo">
-  </header>
+  <div id="content">
+    <header>
+      <img src="logo.png" alt="College Logo">
+      <img src="event_logo.png" alt="Event Logo">
+    </header>
 
-  <div class="game-area">
-    <h2>Round 5</h2>
-    <img src="clock.jpg" alt="Wall Clock at 10:10">
-    
-    <h2>Guess the words related to the above image?</h2>
-    
-    <div class="answers">
-      <input type="text" placeholder="Answer 1">
-      <input type="text" placeholder="Answer 2">
-      <input type="text" placeholder="Answer 3">
+    <div class="game-area">
+      <h2>Round 5</h2>
+      <img src="clock.jpg" alt="Wall Clock at 10:10">
+      
+      <h2>Guess the words related to the above image?</h2>
+      
+      <div class="answers">
+        <input type="text" placeholder="Answer 1">
+        <input type="text" placeholder="Answer 2">
+        <input type="text" placeholder="Answer 3">
+      </div>
+      
+      <button onclick="checkAnswers()">Submit</button>
     </div>
-    
-    <button onclick="checkAnswers()">Submit</button>
+  </div>
+
+  <!-- 🔒 Cheat Popup -->
+  <div id="cheatPopup">
+    ⚠️ Cheating detected! <br>
+    Screen frozen for <span id="countdown">7</span> seconds...
   </div>
 
   <script>
@@ -152,6 +187,35 @@
           alert("❌ All wrong! Try again.");
         }
       }
+    }
+
+    // 🔒 Cheat detection
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) {
+        activateCheatMode();
+      }
+    });
+
+    function activateCheatMode() {
+      const content = document.getElementById("content");
+      const popup = document.getElementById("cheatPopup");
+      const countdownSpan = document.getElementById("countdown");
+
+      content.classList.add("blurred");
+      popup.style.display = "flex";
+
+      let counter = 7;
+      countdownSpan.textContent = counter;
+
+      const interval = setInterval(() => {
+        counter--;
+        countdownSpan.textContent = counter;
+        if (counter <= 0) {
+          clearInterval(interval);
+          popup.style.display = "none";
+          content.classList.remove("blurred");
+        }
+      }, 1000);
     }
   </script>
 </body>
