@@ -75,6 +75,24 @@
     button:hover {
       background: #ddd;
     }
+
+    /* Blur overlay */
+    #blurOverlay {
+      position: fixed;
+      top:0; left:0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.75);
+      color: white;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      font-size: 26px;
+      font-weight: bold;
+      z-index: 9999;
+      text-align: center;
+    }
+    #blurOverlay span { margin-top: 15px; font-size: 40px; color: red; }
   </style>
 </head>
 <body>
@@ -87,7 +105,7 @@
     </div>
   </header>
 
-  <div class="game-area">
+  <div class="game-area" id="gameContent">
     <h2>Round 9</h2>
     <h2>Spot the Room</h2>
     <div class="hint">Hint: What has keys but can't open locks?</div>
@@ -105,7 +123,17 @@
     <button onclick="checkAnswer()">Submit</button>
   </div>
 
+  <!-- Blur overlay -->
+  <div id="blurOverlay">
+    ⚠️ You tried to cheat!<br>
+    Wait <span id="countdown">7</span> seconds...
+  </div>
+
   <script>
+    const gameContent = document.getElementById("gameContent");
+    const blurOverlay = document.getElementById("blurOverlay");
+    const countdownEl = document.getElementById("countdown");
+
     // Normalize input: remove spaces, lowercase everything
     function normalizeInput(str) {
       return str.toLowerCase().replace(/\s+/g, "");
@@ -122,6 +150,32 @@
         alert("❌ Wrong answer. Try again!");
       }
     }
+
+    // Anti-cheating blur effect
+    let countdownTimer = null;
+    function activateBlur() {
+      let timeLeft = 7;
+      countdownEl.textContent = timeLeft;
+      blurOverlay.style.display = "flex";
+      gameContent.style.filter = "blur(10px)";
+
+      clearInterval(countdownTimer);
+      countdownTimer = setInterval(() => {
+        timeLeft--;
+        countdownEl.textContent = timeLeft;
+        if(timeLeft <= 0) {
+          clearInterval(countdownTimer);
+          blurOverlay.style.display = "none";
+          gameContent.style.filter = "none";
+        }
+      }, 1000);
+    }
+
+    document.addEventListener("visibilitychange", () => {
+      if(document.hidden) {
+        activateBlur();
+      }
+    });
   </script>
 </body>
 </html>
