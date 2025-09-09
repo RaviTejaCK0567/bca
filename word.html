@@ -118,11 +118,6 @@
   <script>
     const correct = ["time", "alarm", "10:10"];
 
-    // ✅ Soft cheat protection: If previous round not done → redirect to index
-    if (!sessionStorage.getItem("round4Done")) {
-      window.location.href = "index.html";
-    }
-
     function checkAnswers() {
       const inputs = document.querySelectorAll('.answers input');
       let userAnswers = [];
@@ -147,7 +142,6 @@
       // ✅ All answers correct → move to next round
       if (correct.every(ans => userAnswers.includes(ans.toLowerCase()))) {
         alert("🎉 Congratulations! You solved Round 5. Moving to Round 6...");
-        sessionStorage.setItem("round5Done", "true"); // mark legit progress
         setTimeout(() => {
           window.location.href = "country.html"; // next round
         }, 800);
