@@ -120,17 +120,7 @@
   </div>
 
   <script>
-    const currentRound = "round12";
-
-    // ✅ Soft anti-cheat: if previous round not completed OR this round already completed → send back to index
-    window.onload = function() {
-      if (localStorage.getItem("round11_completed") !== "true" || 
-          localStorage.getItem(currentRound + "_completed") === "true") {
-        window.location.href = "index.html"; // restart from first page
-      }
-    };
-
-    // ✅ Anti-cheat: redirect if user switches tab or minimizes
+    // ✅ Cheat detection: redirect if user switches tab or minimizes
     document.addEventListener("visibilitychange", () => {
       if (document.hidden) {
         window.location.href = "index.html";
@@ -149,7 +139,6 @@
       if (userAnswer === correctAnswer) {
         messageDiv.textContent = "🎉 Congratulations! You solved it. Moving to the next round...";
         messageDiv.style.color = "green";
-        localStorage.setItem(currentRound + "_completed", "true"); // ✅ Mark as done
         setTimeout(() => {
           window.location.href = "samantha.html"; // ✅ Next round
         }, 1500);
