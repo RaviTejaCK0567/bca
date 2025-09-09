@@ -66,8 +66,7 @@
     <img src="logo.png" alt="College Logo">
     <img src="event_logo.png" alt="Event Logo">
   </header>
-  <h2>Round 1</h2>
-  <h2>Find The Difference</h2>
+
   <div class="game-area">
     <div class="images">
       <img id="img1" src="https://iili.io/dUCXcG9.jpg" alt="Image 1">
@@ -76,16 +75,11 @@
   </div>
 
   <script>
-    const currentRound = "round1";
-
-    // ✅ Whenever player comes here, reset game progress
-    localStorage.clear();
-
-    // Differences are defined using percentage positions
+    // Differences are defined using percentage positions (relative to image width/height)
     const differences = [
       { x: 48, y: 39, found: false },
-      { x: 59, y: 71, found: false },
-      { x: 39, y: 73, found: false },
+       { x: 59, y: 71, found: false },
+       { x: 39, y: 73, found: false },
     ];
 
     let foundCount = 0;
@@ -101,21 +95,19 @@
           const dy = diff.y - clickY;
           const distance = Math.sqrt(dx * dx + dy * dy);
 
-          if (distance < 5) {
+          if (distance < 5) { // 5% threshold
             diff.found = true;
             foundCount++;
 
             const marker = document.createElement("div");
             marker.className = "marker";
-            marker.style.left = `${e.clientX}px`;
-            marker.style.top = `${e.clientY}px`;
+            marker.style.left = ${e.clientX}px;
+            marker.style.top = ${e.clientY}px;
             document.body.appendChild(marker);
 
             if (foundCount === differences.length) {
               setTimeout(() => {
-                alert("🎉 Congratulations! You completed Round 1. Moving to Round 2...");
-                localStorage.setItem(currentRound + "Completed", "true");
-                window.location.href = "quiz.html"; // go to round2
+                window.location.href = "quiz.html"; // redirect when all found
               }, 500);
             }
           }
