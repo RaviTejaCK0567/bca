@@ -80,6 +80,32 @@
 
     .message.success { color: #FFD700; font-weight: bold; }
     .message.error { color: #ffcccb; font-weight: bold; }
+
+    /* ✅ Cheat Protection Overlay */
+    #blurOverlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      backdrop-filter: blur(6px);
+      background: rgba(0,0,0,0.7);
+      display: none;
+      z-index: 9999;
+      color: #fff;
+      font-size: 28px;
+      font-weight: bold;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      text-align: center;
+    }
+
+    #countdown {
+      margin-top: 15px;
+      font-size: 22px;
+      color: yellow;
+    }
   </style>
 </head>
 <body>
@@ -88,7 +114,7 @@
     <img src="event_logo.png" alt="Event Logo">
   </header>
 
-  <div class="puzzle-container">
+  <div id="gameContent" class="puzzle-container">
     <h2>Round 3</h2>
     <h2>Word Search Puzzle</h2>
     <p>Find and type the hidden computer-related word from the puzzle:</p>
@@ -113,7 +139,15 @@
     <div class="message" id="message"></div>
   </div>
 
+  <!-- ✅ Cheat Overlay -->
+  <div id="blurOverlay">
+    ⚠️ You tried to cheat!
+    <div id="countdown">Wait 7 seconds...</div>
+  </div>
+
   <script>
+    let redirecting = false; // ✅ block cheat triggers during redirect
+
     function checkPuzzle() {
       const correctWord = "binary";
       const userAnswer = document.getElementById("answer").value.trim().toLowerCase();
@@ -130,6 +164,11 @@
         messageDiv.className = "message success";
         document.querySelector("button").disabled = true;
 
+        // ✅ Reset before moving
+        blurOverlay.style.display = "none";
+        gameContent.style.filter = "none";
+
+        redirecting = true;
         setTimeout(() => {
           window.location.href = "shuffle.html"; // Next round
         }, 1000);
@@ -145,6 +184,42 @@
         e.preventDefault();
         checkPuzzle();
       }
+    });
+
+    // ✅ Cheat Protection
+    const blurOverlay = document.getElementById("blurOverlay");
+    const countdownEl = document.getElementById("countdown");
+    const gameContent = document.getElementById("gameContent");
+    let cheatEnabled = false;
+
+    function activateBlur() {
+      if (!cheatEnabled || redirecting) return;
+
+      let timeLeft = 7;
+      blurOverlay.style.display = "flex";
+      gameContent.style.filter = "blur(6px)";
+      countdownEl.textContent = `Wait ${timeLeft} seconds...`;
+
+      let timer = setInterval(() => {
+        timeLeft--;
+        countdownEl.textContent = `Wait ${timeLeft} seconds...`;
+        if (timeLeft <= 0) {
+          clearInterval(timer);
+          blurOverlay.style.display = "none";
+          gameContent.style.filter = "none";
+        }
+      }, 1000);
+    }
+
+    window.addEventListener("blur", activateBlur);
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) activateBlur();
+    });
+
+    window.addEventListener("load", () => {
+      setTimeout(() => {
+        cheatEnabled = true; // enable only after load
+      }, 1000);
     });
   </script>
 </body>
