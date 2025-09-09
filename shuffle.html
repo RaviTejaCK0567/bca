@@ -77,10 +77,10 @@
   <script>
     const puzzle = document.getElementById("puzzle");
 
-    // ✅ Cheat detection: If player switches tab or minimizes → redirect
+    // ✅ Only tab switch/minimize detection
     document.addEventListener("visibilitychange", () => {
       if (document.hidden) {
-        window.location.href = "index.html";
+        window.location.href = "index.html"; // back to home if cheated
       }
     });
 
