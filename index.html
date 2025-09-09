@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -66,7 +67,8 @@
     <img src="logo.png" alt="College Logo">
     <img src="event_logo.png" alt="Event Logo">
   </header>
-
+<h2>Round 1</h2>
+  <h2>Find The Difference</h2>
   <div class="game-area">
     <div class="images">
       <img id="img1" src="https://iili.io/dUCXcG9.jpg" alt="Image 1">
@@ -101,8 +103,8 @@
 
             const marker = document.createElement("div");
             marker.className = "marker";
-            marker.style.left = ${e.clientX}px;
-            marker.style.top = ${e.clientY}px;
+            marker.style.left = `${e.clientX}px`;
+            marker.style.top = `${e.clientY}px`;
             document.body.appendChild(marker);
 
             if (foundCount === differences.length) {
@@ -120,3 +122,10 @@
   </script>
 </body>
 </html>
+
+
+
+
+
+
+
