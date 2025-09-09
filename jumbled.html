@@ -101,19 +101,11 @@
     </div>
 
     <input type="text" id="answer" placeholder="Enter your answer here">
-
     <br>
     <button onclick="checkAnswer()">Submit</button>
   </div>
 
   <script>
-    // ✅ Anti-cheat: redirect if user switches tab or minimizes
-    document.addEventListener("visibilitychange", () => {
-      if (document.hidden) {
-        window.location.href = "index.html";
-      }
-    });
-
     // Normalize input: remove spaces, lowercase everything
     function normalizeInput(str) {
       return str.toLowerCase().replace(/\s+/g, "");
