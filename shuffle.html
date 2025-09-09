@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Treasure Hunt -- Round 4</title>
+  <title>Treasure Hunt — Round 4</title>
   <style>
     body {
       margin: 0;
@@ -77,19 +77,7 @@
   <script>
     const puzzle = document.getElementById("puzzle");
 
-    // ✅ Only tab switch detection AFTER page fully loaded
-    let pageLoaded = false;
-    window.addEventListener("load", () => {
-      pageLoaded = true;
-    });
-
-    document.addEventListener("visibilitychange", () => {
-      // Only redirect if page is already loaded and tab is hidden
-      if (pageLoaded && document.hidden) {
-        window.location.href = "index.html";
-      }
-    });
-
+    // Tile positions (0-8, last one is empty)
     let positions = [0,1,2,3,4,5,6,7,null];
 
     function shuffleEasy(steps = 10) {
