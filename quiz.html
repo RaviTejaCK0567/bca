@@ -39,6 +39,7 @@
 
     .question {
       margin-bottom: 20px;
+      position: relative;
     }
 
     label {
@@ -53,6 +54,15 @@
       font-size: 16px;
       border: none;
       border-radius: 5px;
+    }
+
+    .tick {
+      position: absolute;
+      right: 10px;
+      top: 40px;
+      font-size: 20px;
+      color: limegreen;
+      display: none;
     }
 
     button {
@@ -83,16 +93,19 @@
     <div class="question">
       <label for="q1">1. How many keys does a standard computer keyboard have?</label>
       <input type="text" id="q1" placeholder="Your answer here">
+      <span class="tick" id="tick1">✅</span>
     </div>
 
     <div class="question">
       <label for="q2">2. A computer prints all numbers from 1 to 100. How many times does the digit 7 appear?</label>
       <input type="text" id="q2" placeholder="Your answer here">
+      <span class="tick" id="tick2">✅</span>
     </div>
 
     <div class="question">
       <label for="q3">3. Which was the first electronic computer?</label>
       <input type="text" id="q3" placeholder="Your answer here">
+      <span class="tick" id="tick3">✅</span>
     </div>
 
     <button onclick="checkAnswers()">Submit Answers</button>
@@ -100,23 +113,37 @@
   </div>
 
   <script>
-    const currentRound = "round2";
-
-    // ✅ Soft redirect anti-cheat
-    window.onload = function() {
-      // If cheating (skipping order), send back to index.html
-      if (localStorage.getItem("round1Completed") !== "true") {
+    // ✅ Anti-cheat: redirect if user switches tab or minimizes
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) {
         window.location.href = "index.html";
       }
+    });
+
+    const answers = {
+      q1: "104",
+      q2: "20",
+      q3: "eniac"
     };
 
-    function checkAnswers() {
-      const answers = {
-        q1: "104",
-        q2: "20",
-        q3: "eniac"
-      };
+    // ✅ Show tick mark instantly when answer matches
+    function attachTickEvents() {
+      Object.keys(answers).forEach((id, index) => {
+        const input = document.getElementById(id);
+        const tick = document.getElementById("tick" + (index + 1));
+        input.addEventListener("input", () => {
+          if (input.value.trim().toLowerCase() === answers[id]) {
+            tick.style.display = "inline";
+          } else {
+            tick.style.display = "none";
+          }
+        });
+      });
+    }
 
+    attachTickEvents();
+
+    function checkAnswers() {
       const userAnswers = {
         q1: document.getElementById('q1').value.trim().toLowerCase(),
         q2: document.getElementById('q2').value.trim().toLowerCase(),
@@ -131,7 +158,6 @@
       
       if (allCorrect) {
         alert("🎉 Congratulations! You completed Round 2. Moving to Round 3...");
-        localStorage.setItem(currentRound + "Completed", "true");
         setTimeout(() => {
           window.location.href = "crossword.html";
         }, 800);
