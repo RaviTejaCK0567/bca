@@ -16,6 +16,7 @@
       height: 100vh;
       font-family: Arial, sans-serif;
       color: #fff;
+      position: relative;
     }
 
     header {
@@ -62,17 +63,51 @@
       height: 100px;
       background: #444;
     }
+
+    /* 🔒 Blur effect */
+    .blurred {
+      filter: blur(8px);
+      pointer-events: none;
+      user-select: none;
+    }
+
+    /* 🔒 Popup overlay */
+    #cheatPopup {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0,0,0,0.85);
+      color: white;
+      font-size: 24px;
+      font-weight: bold;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      z-index: 9999;
+      text-align: center;
+    }
   </style>
 </head>
 <body>
-  <header>
-    <img src="logo.png" alt="College Logo">
-    <img src="event_logo.png" alt="Event Logo">
-  </header> 
+  <div id="content">
+    <header>
+      <img src="logo.png" alt="College Logo">
+      <img src="event_logo.png" alt="Event Logo">
+    </header> 
 
-  <h2>Round 4</h2>
-  <h2>Rearrange the image</h2>
-  <div class="puzzle" id="puzzle"></div>
+    <h2>Round 4</h2>
+    <h2>Rearrange the image</h2>
+    <div class="puzzle" id="puzzle"></div>
+  </div>
+
+  <!-- 🔒 Cheat Popup -->
+  <div id="cheatPopup">
+    ⚠️ Cheating detected! <br>
+    Screen frozen for <span id="countdown">7</span> seconds...
+  </div>
 
   <script>
     const puzzle = document.getElementById("puzzle");
@@ -130,6 +165,35 @@
     }
 
     createTiles();
+
+    // 🔒 Cheat detection
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) {
+        activateCheatMode();
+      }
+    });
+
+    function activateCheatMode() {
+      const content = document.getElementById("content");
+      const popup = document.getElementById("cheatPopup");
+      const countdownSpan = document.getElementById("countdown");
+
+      content.classList.add("blurred");
+      popup.style.display = "flex";
+
+      let counter = 7;
+      countdownSpan.textContent = counter;
+
+      const interval = setInterval(() => {
+        counter--;
+        countdownSpan.textContent = counter;
+        if (counter <= 0) {
+          clearInterval(interval);
+          popup.style.display = "none";
+          content.classList.remove("blurred");
+        }
+      }, 1000);
+    }
   </script>
 </body>
 </html>
