@@ -34,6 +34,7 @@
       max-width: 480px;
       text-align: center;
       padding: 20px;
+      transition: filter 0.3s ease;
     }
     h2 {
       margin-bottom: 15px;
@@ -56,7 +57,7 @@
       border: 2px solid #ccc;
       text-align: center;
       outline: none;
-      text-transform: lowercase; /* ✅ force lowercase */
+      text-transform: lowercase;
     }
     .correct {
       border: 2px solid green !important;
@@ -79,6 +80,30 @@
     button:hover {
       background: #555;
     }
+
+    /* 🚨 Blur overlay */
+    #blurOverlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.75);
+      color: white;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      font-size: 26px;
+      font-weight: bold;
+      z-index: 9999;
+      text-align: center;
+    }
+    #blurOverlay span {
+      margin-top: 15px;
+      font-size: 40px;
+      color: red;
+    }
   </style>
 </head>
 <body>
@@ -91,7 +116,7 @@
     </div>
   </header>
 
-  <div class="game-area">
+  <div class="game-area" id="gameContent">
     <h2>Round 6</h2>
     <h2>Guess The Countries From The Emojis!</h2>
 
@@ -109,16 +134,26 @@
     <button onclick="checkAnswers()">Submit</button>
   </div>
 
+  <!-- 🚨 Blur overlay -->
+  <div id="blurOverlay">
+    ⚠️ You tried to cheat!<br>
+    Wait <span id="countdown">7</span> seconds...
+  </div>
+
   <script>
     const correct = ["iran", "ukraine", "belgium"];
+    const inputs = document.querySelectorAll('.answers input');
+    const blurOverlay = document.getElementById("blurOverlay");
+    const countdownEl = document.getElementById("countdown");
+    const gameContent = document.getElementById("gameContent");
+    let countdownTimer = null;
 
-    // Normalize: remove spaces & lowercase
+    // Normalize answers
     function normalize(str) {
       return str.replace(/\s+/g, "").toLowerCase();
     }
 
     // Force lowercase as user types
-    const inputs = document.querySelectorAll('.answers input');
     inputs.forEach(input => {
       input.addEventListener('input', () => {
         input.value = input.value.toLowerCase();
@@ -127,7 +162,6 @@
 
     function checkAnswers() {
       const userAnswers = Array.from(inputs).map(input => normalize(input.value));
-
       const allCorrect = correct.every((ans, i) => ans === userAnswers[i]);
 
       inputs.forEach((input, i) => {
@@ -143,6 +177,10 @@
       });
 
       if (allCorrect) {
+        // ✅ Ensure blur is gone before redirect
+        blurOverlay.style.display = "none";
+        gameContent.style.filter = "none";
+
         alert("🎉 Correct! Moving to Round 7...");
         window.location.href = "tictactoe.html";
       } else if (userAnswers.some((ans, i) => ans === correct[i])) {
@@ -151,6 +189,31 @@
         alert("❌ All wrong! Try again.");
       }
     }
+
+    // 🚨 Anti-cheating blur effect
+    function activateBlur() {
+      let timeLeft = 7;
+      countdownEl.textContent = timeLeft;
+      blurOverlay.style.display = "flex";
+      gameContent.style.filter = "blur(10px)";
+
+      clearInterval(countdownTimer);
+      countdownTimer = setInterval(() => {
+        timeLeft--;
+        countdownEl.textContent = timeLeft;
+        if (timeLeft <= 0) {
+          clearInterval(countdownTimer);
+          blurOverlay.style.display = "none";
+          gameContent.style.filter = "none";
+        }
+      }, 1000);
+    }
+
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) {
+        activateBlur();
+      }
+    });
   </script>
 </body>
 </html>
