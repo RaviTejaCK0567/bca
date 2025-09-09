@@ -115,8 +115,6 @@
   </div>
 
   <script>
-    const currentRound = "round10";
-
     // ✅ Anti-cheat: redirect if user switches tab or minimizes
     document.addEventListener("visibilitychange", () => {
       if (document.hidden) {
@@ -124,21 +122,12 @@
       }
     });
 
-    // ✅ Soft anti-cheat: if previous round not completed OR this round already completed → redirect to index
-    window.onload = function() {
-      if (localStorage.getItem("round9_completed") !== "true" || 
-          localStorage.getItem(currentRound + "_completed") === "true") {
-        window.location.href = "index.html"; // restart from first page
-      }
-    };
-
     function checkAnswer() {
       const userAnswer = document.getElementById("userAnswer").value.trim().toLowerCase();
       const correctAnswer = "seong gi-hun"; // ✅ correct solution
 
       if (userAnswer === correctAnswer.toLowerCase()) {
         alert("🎉 Correct! Moving to Round 11...");
-        localStorage.setItem(currentRound + "_completed", "true"); // mark as done
         window.location.href = "avatar.html"; // ✅ next round
       } else {
         alert("❌ Wrong answer. Try again!");
