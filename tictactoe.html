@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -40,6 +39,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      transition: filter 0.3s ease;
     }
 
     h1 {
@@ -87,6 +87,30 @@
       border-radius: 6px;
       cursor: pointer;
     }
+
+    /* 🚨 Blur overlay */
+    #blurOverlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.75);
+      color: white;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      font-size: 26px;
+      font-weight: bold;
+      z-index: 9999;
+      text-align: center;
+    }
+    #blurOverlay span {
+      margin-top: 15px;
+      font-size: 40px;
+      color: red;
+    }
   </style>
 </head>
 <body>
@@ -95,7 +119,7 @@
     <img src="event_logo.png" alt="Event Logo">
   </header>
 
-  <div class="game-container">
+  <div class="game-container" id="gameContent">
     <h2>Round 7</h2>
     <h2>Tic Tac Toe</h2>
     <div class="board" id="board"></div>
@@ -103,11 +127,21 @@
     <button onclick="restart()">Restart Game</button>
   </div>
 
+  <!-- 🚨 Blur overlay -->
+  <div id="blurOverlay">
+    ⚠️ You tried to cheat!<br>
+    Wait <span id="countdown">7</span> seconds...
+  </div>
+
   <script>
     const boardEl = document.getElementById("board");
     const msgEl = document.getElementById("message");
+    const blurOverlay = document.getElementById("blurOverlay");
+    const countdownEl = document.getElementById("countdown");
+    const gameContent = document.getElementById("gameContent");
     let board = Array(9).fill("");
     let gameOver = false;
+    let countdownTimer = null;
 
     const WIN_COMBOS = [
       [0,1,2],[3,4,5],[6,7,8],
@@ -171,6 +205,10 @@
       msgEl.textContent = message;
 
       setTimeout(() => {
+        // ✅ Ensure overlay is cleared before moving
+        blurOverlay.style.display = "none";
+        gameContent.style.filter = "none";
+
         if (playerWon) {
           window.location.href = "video.html"; // Go to next round if win
         } else {
@@ -192,6 +230,31 @@
       msgEl.textContent = "";
       render();
     }
+
+    // 🚨 Anti-cheating blur effect
+    function activateBlur() {
+      let timeLeft = 7;
+      countdownEl.textContent = timeLeft;
+      blurOverlay.style.display = "flex";
+      gameContent.style.filter = "blur(10px)";
+
+      clearInterval(countdownTimer);
+      countdownTimer = setInterval(() => {
+        timeLeft--;
+        countdownEl.textContent = timeLeft;
+        if (timeLeft <= 0) {
+          clearInterval(countdownTimer);
+          blurOverlay.style.display = "none";
+          gameContent.style.filter = "none";
+        }
+      }, 1000);
+    }
+
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) {
+        activateBlur();
+      }
+    });
   </script>
 </body>
 </html>
