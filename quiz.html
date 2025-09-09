@@ -80,6 +80,32 @@
       margin-top: 15px;
       font-size: 16px;
     }
+
+    /* ✅ Cheat Protection Overlay */
+    #blurOverlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      backdrop-filter: blur(6px);
+      background: rgba(0,0,0,0.7);
+      display: none;
+      z-index: 9999;
+      color: #fff;
+      font-size: 28px;
+      font-weight: bold;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      text-align: center;
+    }
+
+    #countdown {
+      margin-top: 15px;
+      font-size: 22px;
+      color: yellow;
+    }
   </style>
 </head>
 <body>
@@ -89,7 +115,8 @@
   </header>
   <h2>Round 2</h2>
   <h2>Quiz</h2>
-  <div class="quiz-container">
+  
+  <div id="gameContent" class="quiz-container">
     <div class="question">
       <label for="q1">1. How many keys does a standard computer keyboard have?</label>
       <input type="text" id="q1" placeholder="Your answer here">
@@ -112,21 +139,22 @@
     <div class="message" id="message"></div>
   </div>
 
-  <script>
-    // ✅ Anti-cheat: redirect if user switches tab or minimizes
-   // document.addEventListener("visibilitychange", () => {
-     // if (document.hidden) {
-       // window.location.href = "index.html";
-      //}
-    //});
+  <!-- ✅ Cheat Overlay -->
+  <div id="blurOverlay">
+    ⚠️ You tried to cheat!
+    <div id="countdown">Wait 7 seconds...</div>
+  </div>
 
+  <script>
     const answers = {
       q1: "104",
       q2: "20",
       q3: "eniac"
     };
 
-    // ✅ Show tick mark instantly when answer matches
+    let redirecting = false; // ✅ Stop cheat detection when moving to next round
+
+    // Show ticks live when answers are correct
     function attachTickEvents() {
       Object.keys(answers).forEach((id, index) => {
         const input = document.getElementById(id);
@@ -140,7 +168,6 @@
         });
       });
     }
-
     attachTickEvents();
 
     function checkAnswers() {
@@ -157,7 +184,12 @@
       const messageDiv = document.getElementById('message');
       
       if (allCorrect) {
+        // ✅ Reset state before moving
+        blurOverlay.style.display = "none";
+        gameContent.style.filter = "none";
+
         alert("🎉 Congratulations! You completed Round 2. Moving to Round 3...");
+        redirecting = true; // ✅ Prevent cheat trigger on next load
         setTimeout(() => {
           window.location.href = "crossword.html";
         }, 800);
@@ -165,6 +197,42 @@
         messageDiv.textContent = "Some answers are incorrect. Try again!";
       }
     }
+
+    // ✅ Cheat Protection
+    const blurOverlay = document.getElementById("blurOverlay");
+    const countdownEl = document.getElementById("countdown");
+    const gameContent = document.getElementById("gameContent");
+    let cheatEnabled = false;
+
+    function activateBlur() {
+      if (!cheatEnabled || redirecting) return; // ✅ Ignore on load/redirect
+
+      let timeLeft = 7;
+      blurOverlay.style.display = "flex";
+      gameContent.style.filter = "blur(6px)";
+      countdownEl.textContent = `Wait ${timeLeft} seconds...`;
+
+      let timer = setInterval(() => {
+        timeLeft--;
+        countdownEl.textContent = `Wait ${timeLeft} seconds...`;
+        if (timeLeft <= 0) {
+          clearInterval(timer);
+          blurOverlay.style.display = "none";
+          gameContent.style.filter = "none";
+        }
+      }, 1000);
+    }
+
+    window.addEventListener("blur", activateBlur);
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) activateBlur();
+    });
+
+    window.addEventListener("load", () => {
+      setTimeout(() => {
+        cheatEnabled = true; // ✅ Enable only after page fully loaded
+      }, 1000);
+    });
   </script>
 </body>
 </html>
