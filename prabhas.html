@@ -61,7 +61,7 @@
       border: 2px solid #ccc;
       border-radius: 5px;
       margin-top: 10px;
-      text-transform: lowercase; /* force lowercase while typing */
+      text-transform: lowercase;
     }
     button {
       margin-top: 20px;
@@ -81,6 +81,58 @@
       font-size: 16px;
       font-weight: bold;
     }
+
+    /* Blur overlay */
+    #blurOverlay {
+      position: fixed;
+      top:0; left:0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.75);
+      color: white;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      font-size: 26px;
+      font-weight: bold;
+      z-index: 9999;
+      text-align: center;
+    }
+    #blurOverlay span { margin-top: 15px; font-size: 40px; color: red; }
+
+    /* Correct Answer Popup */
+    #correctPopup {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 10000;
+    }
+    #correctPopupContent {
+      background: white;
+      color: black;
+      padding: 30px 40px;
+      border-radius: 12px;
+      text-align: center;
+      font-size: 22px;
+      font-weight: bold;
+    }
+    #correctPopupContent button {
+      margin-top: 20px;
+      background: green;
+      color: white;
+      font-weight: bold;
+      border-radius: 8px;
+      padding: 10px 20px;
+      border: none;
+      cursor: pointer;
+    }
+    #correctPopupContent button:hover {
+      background: darkgreen;
+    }
   </style>
 </head>
 <body>
@@ -89,7 +141,7 @@
     <img src="event_logo.png" alt="Event Logo">
   </header>
 
-  <div class="quiz-container">
+  <div class="quiz-container" id="gameContent">
     <h2>Round 12</h2>
     <h2>Spot the Room</h2>
     <div class="question">
@@ -109,8 +161,26 @@
     <div class="message" id="message"></div>
   </div>
 
+  <!-- Blur overlay -->
+  <div id="blurOverlay">
+    ⚠️ You tried to cheat!<br>
+    Wait <span id="countdown">7</span> seconds...
+  </div>
+
+  <!-- Correct Answer Popup -->
+  <div id="correctPopup">
+    <div id="correctPopupContent">
+      🎉 Correct!<br>Press OK to go to Round 13
+      <br><button onclick="goNextRound()">OK</button>
+    </div>
+  </div>
+
   <script>
-    // Normalize input: remove spaces & lowercase
+    const gameContent = document.getElementById("gameContent");
+    const blurOverlay = document.getElementById("blurOverlay");
+    const countdownEl = document.getElementById("countdown");
+    const correctPopup = document.getElementById("correctPopup");
+
     function normalizeInput(str) {
       return str.replace(/\s+/g, "").toLowerCase();
     }
@@ -121,22 +191,47 @@
       const messageDiv = document.getElementById("message");
 
       if (userAnswer === correctAnswer) {
-        alert("🎉 Correct! You can proceed to the next round."); // ✅ popup
-        messageDiv.textContent = "🎉 Congratulations! You solved it. Moving to the round 13...";
-        messageDiv.style.color = "green";
-        setTimeout(() => {
-          window.location.href = "samantha.html"; // ✅ next round
-        }, 500);
+        correctPopup.style.display = "flex"; // ✅ show popup
       } else {
-        alert("❌ Incorrect! Try again."); // ✅ popup for wrong answer
+        alert("❌ Incorrect! Try again.");
         messageDiv.textContent = "❌ Incorrect! Try again.";
         messageDiv.style.color = "red";
       }
     }
 
-    // Optional: force lowercase while typing
+    function goNextRound() {
+      window.location.href = "samantha.html"; // next round
+    }
+
+    // Force lowercase while typing
     document.getElementById("answer").addEventListener("input", function() {
       this.value = this.value.toLowerCase();
+    });
+
+    // Anti-cheating blur effect
+    let countdownTimer = null;
+    function activateBlur() {
+      let timeLeft = 7;
+      countdownEl.textContent = timeLeft;
+      blurOverlay.style.display = "flex";
+      gameContent.style.filter = "blur(10px)";
+
+      clearInterval(countdownTimer);
+      countdownTimer = setInterval(() => {
+        timeLeft--;
+        countdownEl.textContent = timeLeft;
+        if(timeLeft <= 0) {
+          clearInterval(countdownTimer);
+          blurOverlay.style.display = "none";
+          gameContent.style.filter = "none";
+        }
+      }, 1000);
+    }
+
+    document.addEventListener("visibilitychange", () => {
+      if(document.hidden) {
+        activateBlur();
+      }
     });
   </script>
 </body>
