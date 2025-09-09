@@ -111,9 +111,15 @@
   <script>
     const correct = ["iran", "ukraine", "belgium"];
 
+    // ✅ Anti-cheat: block if tab changes/minimized
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) {
+        window.location.href = "index.html";
+      }
+    });
+
     // ✅ Anti-cheat: only allow access if coming from previous round
     if (!document.referrer.includes("round5")) {
-      // If user opened directly or skipped, redirect
       window.location.href = "index.html";
     }
 
