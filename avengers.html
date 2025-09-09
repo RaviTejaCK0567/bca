@@ -115,20 +115,13 @@
   </div>
 
   <script>
-    // ✅ Anti-cheat: redirect if user switches tab or minimizes
-    document.addEventListener("visibilitychange", () => {
-      if (document.hidden) {
-        window.location.href = "index.html";
-      }
-    });
-
     function checkAnswer() {
       const userAnswer = document.getElementById("userAnswer").value.trim().toLowerCase();
-      const correctAnswer = "seong gi-hun"; // ✅ correct solution
+      const correctAnswer = "seong gi-hun"; // correct solution
 
       if (userAnswer === correctAnswer.toLowerCase()) {
         alert("🎉 Correct! Moving to Round 11...");
-        window.location.href = "avatar.html"; // ✅ next round
+        window.location.href = "avatar.html"; // next round
       } else {
         alert("❌ Wrong answer. Try again!");
       }
