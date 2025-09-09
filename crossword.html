@@ -116,17 +116,6 @@
   <script>
     const correctWord = "binary";
 
-    // ✅ Anti-cheat: only triggers if user actually leaves the tab
-    let hasFocused = false;
-    window.addEventListener("focus", () => { hasFocused = true; });
-
-    document.addEventListener("visibilitychange", () => {
-      if (document.hidden && hasFocused) {
-        alert("You switched tabs! Returning to home page.");
-        window.location.href = "index.html";
-      }
-    });
-
     function checkPuzzle() {
       const userAnswer = document.getElementById("answer").value.trim().toLowerCase();
       const messageDiv = document.getElementById("message");
@@ -151,7 +140,7 @@
       }
     }
 
-    // Press Enter to submit
+    // Allow pressing Enter key
     document.getElementById("answer").addEventListener("keypress", function(e) {
       if (e.key === "Enter") {
         e.preventDefault();
