@@ -78,8 +78,8 @@
       font-size: 16px;
     }
 
-    .message.success { color: #00ff00; font-weight: bold; }
-    .message.error { color: #ff0000; font-weight: bold; }
+    .message.success { color: #FFD700; font-weight: bold; }
+    .message.error { color: #ffcccb; font-weight: bold; }
   </style>
 </head>
 <body>
@@ -114,9 +114,8 @@
   </div>
 
   <script>
-    const correctWord = "binary";
-
     function checkPuzzle() {
+      const correctWord = "binary";
       const userAnswer = document.getElementById("answer").value.trim().toLowerCase();
       const messageDiv = document.getElementById("message");
 
@@ -127,15 +126,16 @@
       }
 
       if (userAnswer === correctWord) {
-        messageDiv.textContent = "✅ Correct! Moving to next round...";
+        alert("🎉 Congratulations! You solved Round 3. Moving to Round 4...");
+        messageDiv.textContent = "Correct! Moving to next round...";
         messageDiv.className = "message success";
         document.querySelector("button").disabled = true;
 
         setTimeout(() => {
           window.location.href = "shuffle.html"; // go to round 4
-        }, 800);
+        }, 1000);
       } else {
-        messageDiv.textContent = "❌ Incorrect! Try again.";
+        messageDiv.textContent = "Incorrect! Try again.";
         messageDiv.className = "message error";
       }
     }
