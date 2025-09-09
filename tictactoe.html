@@ -1,21 +1,23 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Treasure Hunt -- Round 6</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Treasure Hunt — Round 7 (Tic Tac Toe)</title>
   <style>
     body {
       margin: 0;
       padding: 0;
-      background-color: orange;
+      background-color: orange; /* Medium round theme */
       font-family: Arial, sans-serif;
-      color: #333;
+      color: #fff;
       display: flex;
       flex-direction: column;
       min-height: 100vh;
       align-items: center;
     }
+
     header {
       width: 100%;
       padding: 10px;
@@ -23,125 +25,172 @@
       justify-content: space-between;
       align-items: center;
     }
+
     header img {
-      max-height: 200px;
-      max-width: 80%;
-      object-fit: contain;
+      max-height: 150px;
+      max-width: 60%;
     }
-    .game-area {
+
+    .game-container {
       flex: 1;
       width: 100%;
       max-width: 480px;
-      text-align: center;
       padding: 20px;
-    }
-    h2 {
-      margin-bottom: 15px;
-    }
-    .question {
-      font-size: 40px;
-      margin: 20px 0 10px;
-    }
-    .answers {
       display: flex;
       flex-direction: column;
-      gap: 10px;
       align-items: center;
+      justify-content: center;
     }
-    .answers input {
-      width: 80%;
-      padding: 8px;
-      font-size: 16px;
-      border-radius: 5px;
-      border: 2px solid #ccc;
-      text-align: center;
-      outline: none;
+
+    h1 {
+      margin: 10px 0 20px;
     }
-    .correct {
-      border: 2px solid green !important;
-      background-color: #e6ffe6;
+
+    .board {
+      display: grid;
+      grid-template-columns: repeat(3, 100px);
+      grid-template-rows: repeat(3, 100px);
+      gap: 8px;
     }
-    .wrong {
-      border: 2px solid red !important;
-      background-color: #ffe6e6;
-    }
-    button {
-      margin-top: 20px;
-      padding: 10px 20px;
-      font-size: 16px;
-      border: none;
-      border-radius: 8px;
-      background: #333;
-      color: white;
+
+    .cell {
+      width: 100px;
+      height: 100px;
+      background: #fff;
+      color: #000;
+      font-size: 48px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       cursor: pointer;
+      border-radius: 8px;
     }
-    button:hover {
-      background: #555;
+
+    .cell.filled {
+      cursor: default;
+    }
+
+    .message {
+      margin-top: 20px;
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    button {
+      margin-top: 15px;
+      padding: 10px 16px;
+      font-size: 16px;
+      background-color: #fff;
+      color: orange;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
     }
   </style>
 </head>
 <body>
   <header>
-    <div id="college">
-      <img src="logo.png" alt="College Logo">
-    </div>
-    <div id="event">
-      <img src="event_logo.png" alt="Event Logo">
-    </div>
+    <img src="logo.png" alt="College Logo">
+    <img src="event_logo.png" alt="Event Logo">
   </header>
 
-  <div class="game-area">
-    <h2>Round 6</h2>
-    <h2>Guess The Countries From The Emojis!</h2>
-
-    <div class="answers">
-      <div class="question">👁+🏃=</div>
-      <input type="text" placeholder="Answer 1">
-
-      <div class="question">🇺+ 🦢=</div>
-      <input type="text" placeholder="Answer 2">
-
-      <div class="question">🔔+🏋=</div>
-      <input type="text" placeholder="Answer 3">
-    </div>
-    
-    <button onclick="checkAnswers()">Submit</button>
+  <div class="game-container">
+    <h2>Round 7</h2>
+    <h2>Tic Tac Toe</h2>
+    <div class="board" id="board"></div>
+    <div class="message" id="message"></div>
+    <button onclick="restart()">Restart Game</button>
   </div>
 
   <script>
-    const correct = ["iran", "ukraine", "belgium"];
+    const boardEl = document.getElementById("board");
+    const msgEl = document.getElementById("message");
+    let board = Array(9).fill("");
+    let gameOver = false;
 
-    function checkAnswers() {
-      const inputs = document.querySelectorAll('.answers input');
-      let userAnswers = [];
-      let correctCount = 0;
+    const WIN_COMBOS = [
+      [0,1,2],[3,4,5],[6,7,8],
+      [0,3,6],[1,4,7],[2,5,8],
+      [0,4,8],[2,4,6]
+    ];
 
-      inputs.forEach((input, i) => {
-        const value = input.value.trim().toLowerCase();
-        userAnswers.push(value);
+    // Create board
+    board.forEach((_, i) => {
+      const cell = document.createElement("div");
+      cell.classList.add("cell");
+      cell.dataset.index = i;
+      cell.addEventListener("click", () => handleMove(i));
+      boardEl.appendChild(cell);
+    });
 
-        if (value === correct[i]) {
-          input.classList.add("correct");
-          input.classList.remove("wrong");
-          correctCount++;
-        } else if (value !== "") {
-          input.classList.add("wrong");
-          input.classList.remove("correct");
-        } else {
-          input.classList.remove("correct", "wrong");
-        }
-      });
+    function handleMove(i) {
+      if (gameOver || board[i] !== "") return;
+      board[i] = "X";
+      render();
+      if (checkWinner(board, "X")) return endGame("🎉 You win!", true);
+      if (isDraw()) return endGame("🤝 It's a draw!", false);
 
-      if (correct.every((ans, i) => userAnswers[i] === ans)) {
-        alert("🎉 Correct! Moving to Round 7...");
-        window.location.href = "tictactoe.html"; // next round
-      } else {
-        if (correctCount > 0) {
-          alert("✅ Some answers are correct! Keep going...");
-        } else {
-          alert("❌ All wrong! Try again.");
+      setTimeout(aiMove, 400);
+    }
+
+    function aiMove() {
+      // Medium AI: win > block > random
+      let move = findBestMove("O");
+      if (move === null) move = findBestMove("X");
+      if (move === null) {
+        const empty = board.map((v,i) => v==="" ? i : null).filter(v=>v!==null);
+        move = empty[Math.floor(Math.random() * empty.length)];
+      }
+      board[move] = "O";
+      render();
+      if (checkWinner(board, "O")) return endGame("💻 AI wins!", false);
+      if (isDraw()) return endGame("🤝 It's a draw!", false);
+    }
+
+    function findBestMove(player) {
+      for (let combo of WIN_COMBOS) {
+        let vals = combo.map(i => board[i]);
+        if (vals.filter(v => v === player).length === 2 && vals.includes("")) {
+          return combo[vals.indexOf("")];
         }
       }
+      return null;
+    }
+
+    function checkWinner(b, player) {
+      return WIN_COMBOS.some(combo => combo.every(i => b[i] === player));
+    }
+
+    function isDraw() {
+      return board.every(cell => cell !== "");
+    }
+
+    function endGame(message, playerWon) {
+      gameOver = true;
+      msgEl.textContent = message;
+
+      setTimeout(() => {
+        if (playerWon) {
+          window.location.href = "video.html"; // Go to next round if win
+        } else {
+          restart(); // Restart automatically if lose/draw
+        }
+      }, 1500);
+    }
+
+    function render() {
+      document.querySelectorAll(".cell").forEach((cell, i) => {
+        cell.textContent = board[i];
+        if (board[i] !== "") cell.classList.add("filled");
+      });
+    }
+
+    function restart() {
+      board = Array(9).fill("");
+      gameOver = false;
+      msgEl.textContent = "";
+      render();
     }
   </script>
 </body>
