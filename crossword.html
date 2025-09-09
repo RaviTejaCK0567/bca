@@ -126,13 +126,12 @@
       }
 
       if (userAnswer === correctWord) {
-        alert("🎉 Congratulations! You solved Round 3. Moving to Round 4...");
-        messageDiv.textContent = "Correct! Moving to next round...";
+        messageDiv.textContent = "🎉 Correct! Moving to next round...";
         messageDiv.className = "message success";
         document.querySelector("button").disabled = true;
 
         setTimeout(() => {
-          window.location.href = "shuffle.html"; // go to round 4
+          window.location.href = "shuffle.html"; // Next round
         }, 1000);
       } else {
         messageDiv.textContent = "Incorrect! Try again.";
