@@ -61,6 +61,7 @@
       border: 2px solid #ccc;
       border-radius: 5px;
       margin-top: 10px;
+      text-transform: lowercase; /* force lowercase while typing */
     }
     button {
       margin-top: 20px;
@@ -109,6 +110,7 @@
   </div>
 
   <script>
+    // Normalize input: remove spaces & lowercase
     function normalizeInput(str) {
       return str.replace(/\s+/g, "").toLowerCase();
     }
@@ -119,16 +121,23 @@
       const messageDiv = document.getElementById("message");
 
       if (userAnswer === correctAnswer) {
-        messageDiv.textContent = "🎉 Congratulations! You solved it. Moving to the next round...";
+        alert("🎉 Correct! You can proceed to the next round."); // ✅ popup
+        messageDiv.textContent = "🎉 Congratulations! You solved it. Moving to the round 13...";
         messageDiv.style.color = "green";
         setTimeout(() => {
-          window.location.href = "samantha.html";
-        }, 1500);
+          window.location.href = "samantha.html"; // ✅ next round
+        }, 500);
       } else {
+        alert("❌ Incorrect! Try again."); // ✅ popup for wrong answer
         messageDiv.textContent = "❌ Incorrect! Try again.";
         messageDiv.style.color = "red";
       }
     }
+
+    // Optional: force lowercase while typing
+    document.getElementById("answer").addEventListener("input", function() {
+      this.value = this.value.toLowerCase();
+    });
   </script>
 </body>
 </html>
