@@ -78,8 +78,8 @@
       font-size: 16px;
     }
 
-    .message.success { color: #00FF00; font-weight: bold; }
-    .message.error { color: #ff3333; font-weight: bold; }
+    .message.success { color: #00ff00; font-weight: bold; }
+    .message.error { color: #ff0000; font-weight: bold; }
   </style>
 </head>
 <body>
@@ -114,29 +114,20 @@
   </div>
 
   <script>
-    let interacted = false;
+    const correctWord = "binary";
 
-    // Only start tab switch detection after user interacts with page
-    function startInteraction() {
-      interacted = true;
-      window.removeEventListener("keydown", startInteraction);
-      window.removeEventListener("mousedown", startInteraction);
-      window.removeEventListener("touchstart", startInteraction);
-    }
-
-    window.addEventListener("keydown", startInteraction);
-    window.addEventListener("mousedown", startInteraction);
-    window.addEventListener("touchstart", startInteraction);
+    // ✅ Anti-cheat: only triggers if user actually leaves the tab
+    let hasFocused = false;
+    window.addEventListener("focus", () => { hasFocused = true; });
 
     document.addEventListener("visibilitychange", () => {
-      if (interacted && document.hidden) {
-        // Only redirect if user interacted and then switched tabs
+      if (document.hidden && hasFocused) {
+        alert("You switched tabs! Returning to home page.");
         window.location.href = "index.html";
       }
     });
 
     function checkPuzzle() {
-      const correctWord = "binary";
       const userAnswer = document.getElementById("answer").value.trim().toLowerCase();
       const messageDiv = document.getElementById("message");
 
@@ -152,15 +143,15 @@
         document.querySelector("button").disabled = true;
 
         setTimeout(() => {
-          window.location.href = "shuffle.html"; // next round
-        }, 1000);
+          window.location.href = "shuffle.html"; // go to round 4
+        }, 800);
       } else {
         messageDiv.textContent = "❌ Incorrect! Try again.";
         messageDiv.className = "message error";
       }
     }
 
-    // Allow Enter key
+    // Press Enter to submit
     document.getElementById("answer").addEventListener("keypress", function(e) {
       if (e.key === "Enter") {
         e.preventDefault();
