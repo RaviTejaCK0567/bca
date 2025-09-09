@@ -56,6 +56,7 @@
       border: 2px solid #ccc;
       text-align: center;
       outline: none;
+      text-transform: lowercase; /* ✅ force lowercase */
     }
     .correct {
       border: 2px solid green !important;
@@ -109,19 +110,24 @@
   </div>
 
   <script>
-    // ✅ Correct answers
     const correct = ["iran", "ukraine", "belgium"];
 
-    // ✅ Normalize function: remove spaces & lowercase
+    // Normalize: remove spaces & lowercase
     function normalize(str) {
       return str.replace(/\s+/g, "").toLowerCase();
     }
 
+    // Force lowercase as user types
+    const inputs = document.querySelectorAll('.answers input');
+    inputs.forEach(input => {
+      input.addEventListener('input', () => {
+        input.value = input.value.toLowerCase();
+      });
+    });
+
     function checkAnswers() {
-      const inputs = document.querySelectorAll('.answers input');
       const userAnswers = Array.from(inputs).map(input => normalize(input.value));
 
-      // Check if all answers are correct
       const allCorrect = correct.every((ans, i) => ans === userAnswers[i]);
 
       inputs.forEach((input, i) => {
@@ -138,7 +144,7 @@
 
       if (allCorrect) {
         alert("🎉 Correct! Moving to Round 7...");
-        window.location.href = "tictactoe.html"; // ✅ next round
+        window.location.href = "tictactoe.html";
       } else if (userAnswers.some((ans, i) => ans === correct[i])) {
         alert("✅ Some answers are correct! Keep going...");
       } else {
