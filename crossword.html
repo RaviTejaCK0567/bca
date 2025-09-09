@@ -114,9 +114,15 @@
   </div>
 
   <script>
-    // ✅ Anti-cheat: if user switches tab or minimizes, restart
+    // ✅ Only trigger tab switch detection AFTER page fully loaded
+    let pageLoaded = false;
+    window.addEventListener("load", () => {
+      pageLoaded = true;
+    });
+
     document.addEventListener("visibilitychange", () => {
-      if (document.hidden) {
+      // Only redirect if page is fully loaded AND tab is hidden
+      if (pageLoaded && document.hidden) {
         window.location.href = "index.html";
       }
     });
