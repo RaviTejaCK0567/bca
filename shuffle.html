@@ -77,11 +77,6 @@
   <script>
     const puzzle = document.getElementById("puzzle");
 
-    // ✅ Soft check: If they didn’t come from round3, send them fresh to index
-    if (document.referrer === "" || !document.referrer.includes("round3")) {
-      window.location.href = "index.html";
-    }
-
     // ✅ Cheat detection: If player switches tab or minimizes → redirect
     document.addEventListener("visibilitychange", () => {
       if (document.hidden) {
