@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -60,6 +59,24 @@
       transform: translate(-50%, -50%);
       background-color: rgba(0, 255, 0, 0.4);
     }
+
+    /* Blur overlay */
+    #blurOverlay {
+      position: fixed;
+      top:0; left:0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.75);
+      color: white;
+      display: none;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      font-size: 26px;
+      font-weight: bold;
+      z-index: 9999;
+      text-align: center;
+    }
+    #blurOverlay span { margin-top: 15px; font-size: 40px; color: red; }
   </style>
 </head>
 <body>
@@ -67,24 +84,34 @@
     <img src="logo.png" alt="College Logo">
     <img src="event_logo.png" alt="Event Logo">
   </header>
-<h2>Round 1</h2>
+  <h2>Round 1</h2>
   <h2>Find The Difference</h2>
-  <div class="game-area">
+  <div class="game-area" id="gameContent">
     <div class="images">
       <img id="img1" src="https://iili.io/dUCXcG9.jpg" alt="Image 1">
       <img id="img2" src="https://iili.io/dUCVIPn.jpg" alt="Image 2">
     </div>
   </div>
 
+  <!-- Blur overlay -->
+  <div id="blurOverlay">
+    ⚠️ You tried to cheat!<br>
+    Wait <span id="countdown">7</span> seconds...
+  </div>
+
   <script>
     // Differences are defined using percentage positions (relative to image width/height)
     const differences = [
-      { x: 48, y: 39, found: false },
-       { x: 59, y: 71, found: false },
-       { x: 39, y: 73, found: false },
+      { x: 48, y: 40, found: false },
+      { x: 59, y: 73, found: false },
+      { x: 43, y: 73, found: false },
     ];
 
     let foundCount = 0;
+    const gameContent = document.getElementById("gameContent");
+    const blurOverlay = document.getElementById("blurOverlay");
+    const countdownEl = document.getElementById("countdown");
+    let countdownTimer = null;
 
     function handleImageClick(e, imageElement) {
       const rect = imageElement.getBoundingClientRect();
@@ -119,13 +146,31 @@
 
     document.getElementById("img1").addEventListener("click", e => handleImageClick(e, e.target));
     document.getElementById("img2").addEventListener("click", e => handleImageClick(e, e.target));
+
+    // Anti-cheating blur effect
+    function activateBlur() {
+      let timeLeft = 7;
+      countdownEl.textContent = timeLeft;
+      blurOverlay.style.display = "flex";
+      gameContent.style.filter = "blur(10px)";
+
+      clearInterval(countdownTimer);
+      countdownTimer = setInterval(() => {
+        timeLeft--;
+        countdownEl.textContent = timeLeft;
+        if(timeLeft <= 0) {
+          clearInterval(countdownTimer);
+          blurOverlay.style.display = "none";
+          gameContent.style.filter = "none";
+        }
+      }, 1000);
+    }
+
+    document.addEventListener("visibilitychange", () => {
+      if(document.hidden) {
+        activateBlur();
+      }
+    });
   </script>
 </body>
 </html>
-
-
-
-
-
-
-
