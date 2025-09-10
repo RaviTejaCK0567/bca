@@ -147,7 +147,7 @@
   <!-- 🔒 Cheat Popup -->
   <div id="cheatPopup">
     ⚠️ Cheating detected! <br>
-    Screen frozen for <span id="countdown">7</span> seconds...
+    Screen frozen for <span id="countdown">300</span> seconds...
   </div>
 
   <script>
@@ -204,7 +204,7 @@
       content.classList.add("blurred");
       popup.style.display = "flex";
 
-      let counter = 7;
+      let counter = 300;
       countdownSpan.textContent = counter;
 
       const interval = setInterval(() => {
