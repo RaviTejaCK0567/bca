@@ -62,36 +62,6 @@
       font-weight: bold;
       text-align: center;
     }
-    input {
-      width: 80%;
-      max-width: 350px;
-      padding: 12px;
-      font-size: 18px;
-      border-radius: 5px;
-      border: none;
-      background-color: black;
-      color: white;
-      text-align: center;
-      margin: 20px 0;
-    }
-    button {
-      padding: 10px 20px;
-      font-size: 16px;
-      border: none;
-      border-radius: 8px;
-      background: #fff;
-      color: maroon;
-      cursor: pointer;
-      font-weight: bold;
-    }
-    button:hover {
-      background: #ddd;
-    }
-    .message {
-      margin-top: 15px;
-      font-size: 18px;
-      font-weight: bold;
-    }
   </style>
 </head>
 <body>
@@ -110,83 +80,9 @@
       <ol>
         <li>Arrange the cut pieces to complete the picture.</li>
         <li>Flip the completed picture to find the hidden password.</li>
+        <li>Follow the instructions of the Killer.....</li>
       </ol>
     </div>
-
-    <input type="text" id="answer" placeholder="Enter password here...">
-    <br>
-    <button onclick="checkAnswer()">Submit</button>
-    <div class="message" id="message"></div>
   </div>
-
-  <script>
-    // ----------------------
-    // Backend URL
-    // ----------------------
-    const backendURL = "https://render.com/docs/web-services?_gl=1*1ff1dm9*_ga*OTI4NTA4NzY1LjE3NTY5Njg4NDU.*_ga_QK9L9QJC5N*czE3NTczOTc0NjckbzckZzAkdDE3NTczOTc0NjckajYwJGwwJGgw#port-binding";
-
-    // ----------------------
-    // Normalize input
-    // ----------------------
-    function normalizeInput(str) {
-      return str.toLowerCase().replace(/\s+/g, "");
-    }
-
-    // ----------------------
-    // Check Answer
-    // ----------------------
-    async function checkAnswer() {
-      const userInput = normalizeInput(document.getElementById("answer").value);
-      const messageDiv = document.getElementById("message");
-
-      if (!userInput) {
-        messageDiv.textContent = "❌ Please enter an answer!";
-        messageDiv.style.color = "red";
-        return;
-      }
-
-      try {
-        // Check if answer is valid and not used
-        const checkRes = await fetch(`${backendURL}/check-answer?round=13&answer=${userInput}`);
-        const checkData = await checkRes.json();
-
-        if (!checkData.valid) {
-          messageDiv.textContent = "❌ Invalid answer!";
-          messageDiv.style.color = "red";
-          return;
-        }
-
-        if (checkData.used) {
-          messageDiv.textContent = "❌ This answer is already used!";
-          messageDiv.style.color = "red";
-          return;
-        }
-
-        // Mark answer as used
-        const markRes = await fetch(`${backendURL}/mark-used`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ round: "13", answer: userInput })
-        });
-
-        const markData = await markRes.json();
-        if (markData.success) {
-          messageDiv.textContent = "✅ Correct! Moving to congratulations page...";
-          messageDiv.style.color = "green";
-          setTimeout(() => {
-            window.location.href = "congratulations.html";
-          }, 1500);
-        } else {
-          messageDiv.textContent = "❌ Could not save your answer. Try again!";
-          messageDiv.style.color = "red";
-        }
-
-      } catch (err) {
-        console.error(err);
-        messageDiv.textContent = "❌ Server error. Try again later!";
-        messageDiv.style.color = "red";
-      }
-    }
-  </script>
 </body>
 </html>
