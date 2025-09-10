@@ -164,7 +164,7 @@
   <!-- Blur overlay -->
   <div id="blurOverlay">
     ⚠️ You tried to cheat!<br>
-    Wait <span id="countdown">7</span> seconds...
+    Wait <span id="countdown">300</span> seconds...
   </div>
 
   <!-- Correct Answer Popup -->
@@ -211,7 +211,7 @@
     // Anti-cheating blur effect
     let countdownTimer = null;
     function activateBlur() {
-      let timeLeft = 7;
+      let timeLeft = 300;
       countdownEl.textContent = timeLeft;
       blurOverlay.style.display = "flex";
       gameContent.style.filter = "blur(10px)";
